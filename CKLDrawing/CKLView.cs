@@ -102,7 +102,25 @@ namespace CKLDrawing
 			{
 				//if ((int) newDimention > (int) _timeDimention) delMulti = (double)newDelCoast / _delCoast;
 				intervalMulti = UpdateInterval(newDimention);
-			} 
+			}
+
+
+			TimeInterval temp = _currentInterval.Clone() as TimeInterval;
+			if (temp == null) 
+			{
+				MessageBox.Show("Null interval");
+				return;
+			}
+		
+			temp.Scale(intervalMulti);
+
+			if (!IsDelCoastValid(temp, newDelCoast)) 
+			{
+				MessageBox.Show("Limit error");
+				return;
+			}
+
+			_currentInterval = temp;
 
 			double scale = intervalMulti * delMulti;
 
@@ -117,6 +135,8 @@ namespace CKLDrawing
 
 		private void DrawOx()
 		{
+
+			UpdateDelCoastToValid();
 
 			_timeScale = new TimeOx(_currentInterval, _delCoast);
 
@@ -137,8 +157,29 @@ namespace CKLDrawing
 				Margin = Constants.Dimentions.TIME_OX_MARGIN,
 			});
 
+		} 
+
+		private bool IsDelCoastValid(TimeInterval interval, int delCoast) 
+		{
+			return interval.Duration / delCoast <= Constants.MAX_DEL_COUNT;
 		}
 
+		private void UpdateDelCoastToValid() 
+		{
+			while (!IsDelCoastValid(_currentInterval, _delCoast)) 
+			{
+				if (_delCoast * 2 >= Constants.TIME_DIMENTIONS_CONVERT[(int)_timeDimention] &&
+				!_timeDimention.Equals(TimeDimentions.WEEKS))
+				{
+					_delCoast = 1;
+					
+					_currentInterval.Scale(UpdateInterval((TimeDimentions)(int)_timeDimention + 1));
+					_timeDimention = (TimeDimentions)(int)_timeDimention + 1;
+				}
+				else _delCoast *= 2;
+			}
+		}
+			
 		private void ChangeDelCoast()
 		{
 			(_listView.Children[0] as ValueBox).Content =
@@ -181,7 +222,7 @@ namespace CKLDrawing
 				}
 			}
 
-			_currentInterval.Scale(intervalMulti);
+			//_currentInterval.Scale(intervalMulti);
 
 			return intervalMulti;
 		}
