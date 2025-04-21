@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CKLLib.CKL">
+    <Position X="0.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAggAAAAEgAAAAAAAAAgAQIAEAABAAAAAAAA=</HashCode>
+      <FileName>CKL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CKLLib.Pair">
+    <Position X="6.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgAAAAAAAEAAAAIAAAQEAAAAAAAA=</HashCode>
+      <FileName>Pair.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CKLLib.RelationItem">
+    <Position X="2.5" Y="3" Width="1.5" />
+    <NestedTypes>
+      <Class Name="CKLLib.RelationItem.TimeIntervalEqualityComparer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RelationItem.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgIAAAAAAAAAAAIAAAAAgAEAAABA=</HashCode>
+      <FileName>RelationItem.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CKLLib.TimeInterval" BaseTypeListCollapsed="true">
+    <Position X="4.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAIAACAAQEgAIAAAAAIAAgAIIAAAAAAAAAARA=</HashCode>
+      <FileName>TimeInterval.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CKLLib.Operations.CKLMath">
+    <Position X="10" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JAgACAQAAgAAKIAIIIAQAQBEQAAIlACAAAAAAYZAFuQ=</HashCode>
+      <FileName>CKLMath.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="CKLLib.TimeDimentions">
+    <Position X="8" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAABIAAAAEQAAABAABAQA=</HashCode>
+      <FileName>TimeDimentions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
