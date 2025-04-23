@@ -5,15 +5,17 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using CKLLib.Operations;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
 
 namespace CKLLib.tests
 {
-    public class MathOperationsTest
+	[TestClass]
+	public class MathOperationsTest
     {
 
-        [Fact]
+        [TestMethod]
         public void ItemProjection_Operation_Test_1() 
         {
             CKL data = new CKL()
@@ -48,7 +50,7 @@ namespace CKLLib.tests
                 Relation = new HashSet<RelationItem>() { new RelationItem(new Pair("A2", "B3"), [new TimeInterval(300, 500)]) }
             };
 
-            Assert.Equal(exp, res, new CKLEqualityComparer());
+            Assert.AreEqual(exp, res, new CKLEqualityComparer());
         }
     }
 }
