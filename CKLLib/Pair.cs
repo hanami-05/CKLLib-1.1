@@ -51,7 +51,7 @@ namespace CKLLib
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(FirstValue, SecondValue);
+            return base.GetHashCode();
 
             //TODO: переделать хеш код под много значений
         }
@@ -59,7 +59,7 @@ namespace CKLLib
         public override string ToString()
         {
             if (ThirdValue != null) 
-                return $"({FirstValue.ToString()};{SecondValue!.ToString()};{ThirdValue.ToString()})";
+                return $"({FirstValue!.ToString()};{SecondValue!.ToString()};{ThirdValue.ToString()})";
 			
             if (SecondValue != null)
                 return $"({FirstValue.ToString()};{SecondValue.ToString()})";

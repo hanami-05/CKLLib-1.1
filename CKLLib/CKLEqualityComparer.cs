@@ -25,6 +25,7 @@ namespace CKLLib
 			return true;
 		}
 
+
 		public bool AbsoluteEquals(CKL? x, CKL? y) 
 		{
 			if (x == null && y == null) return true;
