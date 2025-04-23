@@ -71,6 +71,7 @@ namespace CKLLib
             public static CKL LeftPrecedence(CKL ckl, TimeInterval interval, double t) 
             {
                 if (ckl == null) throw new ArgumentNullException("CKL object con not be null");
+                //TODO: interval null
 
 				string file = Path.GetFileName(ckl.FilePath);
 				string name = file.Substring(0, file.LastIndexOf('.'));
@@ -784,6 +785,46 @@ namespace CKLLib
 
 				return new CKL(newFilePath, ckl1.GlobalInterval, ckl1.Dimention, source, relation);
 			}
+
+            // Dop operations
+            public static CKL ItemProjection(CKL ckl, object current, Func<object, object, bool> comp, TimeInterval interval) 
+            {
+                if (ckl == null) throw new ArgumentNullException("CKL object could not be null");
+
+                foreach (Pair p in ckl.Source) 
+                {
+                    if (p.SecondValue == null) throw new ArgumentException("Object should at least contains two elements");
+                }
+
+                if (interval == null) throw new ArgumentNullException("Time Interval shouldn't be null");
+
+                if (current == null) throw new ArgumentNullException("Item of relation cannot be null");
+
+                HashSet<Pair> source = new HashSet<Pair>();
+                HashSet<RelationItem> relation = new HashSet<RelationItem>();
+
+                foreach (RelationItem item in ckl.Relation) 
+                {
+                   if (item.Value.HasObject(current, comp) && IsIntervalInserted(interval, item.Intervals)) 
+                    {
+                        source.Add(item.Value);
+                        relation.Add(new RelationItem(item.Value, new List<TimeInterval>() { (TimeInterval) interval.Clone() }));
+                    }
+                }
+
+
+				string file = Path.GetFileName(ckl.FilePath);
+				string name = file.Substring(0, file.LastIndexOf('.'));
+
+                string newPath = GetNewFilePath(ckl.FilePath, $"proj_{current.ToString()}_" + 
+                    $"{(interval.StartTime.ToString().IndexOf('.') == -1 ?
+                    interval.StartTime.ToString() : interval.StartTime.ToString().Substring(0, interval.EndTime.ToString().IndexOf('.')))}" + 
+                    $"{(interval.EndTime.ToString().IndexOf('.') == -1 ?
+					interval.EndTime.ToString() : interval.EndTime.ToString().Substring(0, interval.EndTime.ToString().IndexOf('.')))}" +
+                    name);
+
+				return new CKL(newPath, interval, ckl.Dimention, source, relation);
+            }
         }
     }
 }
