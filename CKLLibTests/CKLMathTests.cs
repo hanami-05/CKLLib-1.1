@@ -43,5 +43,92 @@ namespace CKLLibTests
 
 			Assert.AreEqual<CKL>(exp, res, new CKLEqualityComparer());
 		}
+
+		[TestMethod]
+		public void Item_Projection_Test_2()
+		{
+			List<object> l1 = new List<object>() { "K1", "K2", "K3" };
+			List<object> l2 = new List<object>() { "M1", "M2" };
+			List<object> l3 = new List<object>() { "N1", "N2", "N3", "N4"};
+			List<object> l4 = new List<object>() { "S1", "S2", "S3"};
+
+			HashSet<Pair> source = new HashSet<Pair>();
+
+			foreach (object obj1 in l1)
+			{
+				foreach (object obj2 in l2) 
+				{
+					foreach (object obj3 in l3) 
+					{
+						foreach (object obj4 in l4) 
+						{
+							source.Add(new Pair(new List<object>() { obj1, obj2, obj3, obj4}));
+						}
+					}
+				}
+			}
+
+			CKL data = new CKL()
+			{
+				FilePath = "C:\\Users\\user\\Ciclograms\\test1.ckl",
+				GlobalInterval = new TimeInterval(1000, 5250),
+				Dimention = TimeDimentions.NANOSECONDS,
+				Source = source,
+				Relation = new HashSet<RelationItem>()
+				{
+					new RelationItem(new Pair(new List<object>() { "K1", "M1", "N1", "S1"}), [new TimeInterval(1000, 1300), new TimeInterval(3000, 4220)]),
+					new RelationItem(new Pair(new List<object>() { "K1", "M1", "N1", "S2"}), [new TimeInterval(1500, 1725), new TimeInterval(2015, 2200), 
+						new TimeInterval(3200, 4725)]),
+					new RelationItem(new Pair(new List<object>() { "K1", "M1", "N2", "S2"}), [new TimeInterval(2025, 3075)]),
+					new RelationItem(new Pair(new List<object>() { "K1", "M1", "N2", "S3"}), [new TimeInterval(1600, 2300), new TimeInterval(4050, 5100)]),
+					new RelationItem(new Pair(new List<object>() { "K1", "M1", "N3", "S1"}), [new TimeInterval(1000, 1825), new TimeInterval(2000, 3450), 
+						new TimeInterval(4600, 4975)]),
+					new RelationItem(new Pair(new List<object>() { "K1", "M2", "N1", "S1"}), [new TimeInterval(1550, 1975), new TimeInterval(2105, 3215)]),
+					new RelationItem(new Pair(new List<object>() { "K1", "M2", "N1", "S3"}), [new TimeInterval(2450, 2975), new TimeInterval(3835, 4065)]),
+					new RelationItem(new Pair(new List<object>() { "K1", "M2", "N4", "S2"}), [new TimeInterval(1110, 1405), new TimeInterval(1975, 2745), 
+					new TimeInterval(3220, 3585), new TimeInterval(4295, 4700)]),
+					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N1", "S3"}), [new TimeInterval(3300, 3600)]),
+					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N3", "S1"}), [new TimeInterval(2400, 3035), new TimeInterval(3205, 4000), 
+					new TimeInterval(4550, 4945), new TimeInterval(5100, 5250)]),
+					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N4", "S2"}), [new TimeInterval(1000, 1500), new TimeInterval(2500, 2800)]),
+					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N4", "S2"}), [new TimeInterval(1200, 1385), new TimeInterval(2005, 2815),
+					new TimeInterval(3025, 3450), new TimeInterval(3800, 4025), new TimeInterval(4550, 4750), new TimeInterval(4900, 5050)]),
+					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N1", "S1"}), [new TimeInterval(2200, 2350), new TimeInterval(2425, 3000),
+					new TimeInterval(3295, 4300)]),
+					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N3", "S2"}), [new TimeInterval(1550, 2325), new TimeInterval(2650, 3220)]),
+					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N3", "S4"}), [new TimeInterval(1800, 2750)]),
+					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N2", "S3"}), [new TimeInterval(1000, 1200), new TimeInterval(2100, 3400),
+					new TimeInterval(4800, 5250)]),
+					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N3", "S1"}), [new TimeInterval(1000, 5250)]),
+					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N4", "S1"}), [new TimeInterval(1350, 2345), new TimeInterval(2700, 5050)]),
+					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N4", "S3"}), [new TimeInterval(1400, 1600), new TimeInterval(1800, 3225)]),
+				}
+			};
+
+			TimeInterval interval = new TimeInterval(1500, 1600);
+
+			List<object> currents = ["K3", "S1"];
+
+			CKL res = CKLMath.ItemProjection(data, currents, (obj1, obj2) => obj1.ToString().Equals(obj2.ToString()), interval);
+
+			CKL exp = new CKL()
+			{
+				FilePath = "",
+				GlobalInterval = interval,
+				Dimention = TimeDimentions.NANOSECONDS,
+				Source = new HashSet<Pair>()
+				{
+					new Pair(new List<object>() {"K3", "M2", "N3", "S1"}),
+					new Pair(new List<object>() {"K3", "M2", "N4", "S1"})
+				},
+				Relation = new HashSet<RelationItem>()
+				{
+					new RelationItem(new Pair(new List<object>() {"K3", "M2", "N3", "S1"}), [interval]),
+					new RelationItem(new Pair(new List<object>() {"K3", "M2", "N4", "S1"}), [interval])
+				}
+			};
+
+			Assert.AreEqual<CKL>(exp, res, new CKLEqualityComparer());
+		}
 	}
 }
