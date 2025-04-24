@@ -33,8 +33,8 @@ namespace CKLLib
         {
             if (FirstValue != null || SecondValue != null || ThirdValue != null) 
                 throw new ArgumentException("Use another constructor for FirstValue, SecondValue or ThirdValue");
-            if (Values == null) throw new ArgumentNullException("Values collection can not be null");
-            if (Values.Count() == 0) throw new ArgumentException("Values can not be empty");
+            if (values == null) throw new ArgumentNullException("Values collection can not be null");
+            if (values.Count() == 0) throw new ArgumentException("Values can not be empty");
 
             Values = values;
         }
