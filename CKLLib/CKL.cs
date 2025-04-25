@@ -71,7 +71,9 @@ namespace CKLLib
 
         public static CKL? GetFromFile(string path) 
         {
-            return JsonSerializer.Deserialize<CKL>(File.ReadAllText(path));
+            CKL? ckl  = JsonSerializer.Deserialize<CKL>(File.ReadAllText(path));
+            if (ckl is not null) ckl.FilePath = path;
+            return ckl;
         }
 	}
 }

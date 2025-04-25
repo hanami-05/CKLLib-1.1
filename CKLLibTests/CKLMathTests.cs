@@ -70,7 +70,7 @@ namespace CKLLibTests
 
 			CKL data = new CKL()
 			{
-				FilePath = "C:\\Users\\user\\Ciclograms\\test1.ckl",
+				FilePath = "C:\\Users\\79136\\Desktop\\CKL_Files\\Sputniks_Composition.ckl",
 				GlobalInterval = new TimeInterval(1000, 5250),
 				Dimention = TimeDimentions.NANOSECONDS,
 				Source = source,

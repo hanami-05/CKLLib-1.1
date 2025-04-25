@@ -855,9 +855,9 @@ namespace CKLLib
 
 				string newPath = GetNewFilePath(ckl.FilePath, $"proj_{string.Join('_', currents)}_" +
 					$"{(interval.StartTime.ToString().IndexOf('.') == -1 ?
-					interval.StartTime.ToString() : interval.StartTime.ToString().Substring(0, interval.EndTime.ToString().IndexOf('.')))}" +
+					interval.StartTime.ToString() : interval.StartTime.ToString().Substring(0, interval.EndTime.ToString().IndexOf('.')))}_" +
 					$"{(interval.EndTime.ToString().IndexOf('.') == -1 ?
-					interval.EndTime.ToString() : interval.EndTime.ToString().Substring(0, interval.EndTime.ToString().IndexOf('.')))}" +
+					interval.EndTime.ToString() : interval.EndTime.ToString().Substring(0, interval.EndTime.ToString().IndexOf('.')))}_" +
 					name);
 
 				return new CKL(newPath, interval, ckl.Dimention, source, relation);
