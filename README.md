@@ -9,7 +9,7 @@
 ## Как загрузить **.dll** файлы библиотек локально
 
 - **Установить dotnet (Windows)**
-    ```python
+    ```cmd
     winget install Microsoft.DotNet.SDK.8   
     ```
 
