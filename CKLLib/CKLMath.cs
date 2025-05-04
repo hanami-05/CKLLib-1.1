@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -703,6 +704,40 @@ namespace CKLLib
 
                 return new CKL(newFilePath, ckl1.GlobalInterval, ckl1.Dimention, source, relation);
             }
+
+            public static CKL CompositionWithPath(CKL ckl1, CKL ckl2) 
+            {
+                HashSet<Pair> source = new HashSet<Pair>();
+                HashSet<RelationItem> relation = new HashSet<RelationItem>();
+                Pair p;
+
+                foreach (RelationItem item1 in ckl1.Relation)
+                {
+                    foreach (RelationItem item2 in ckl2.Relation) 
+                    {
+                        if (item1.Value.Values.LastOrDefault()?.Equals(item2.Value.Values.FirstOrDefault()) == null ?
+                            false : item1.Value.Values.LastOrDefault()!.Equals(item2.Value.Values.FirstOrDefault()) && 
+                            !IntervalsIntersection(item1.Intervals, item2.Intervals).Equals(TimeInterval.ZERO)) 
+                        {
+                            p = new Pair(item1.Value.Values.Union(item2.Value.Values));
+
+                            source.Add(p);
+                            relation.Add(new RelationItem(p, IntervalsUnion(item1.Intervals, item2.Intervals)));
+                        }
+                    }
+                }
+
+				string file1 = Path.GetFileName(ckl1.FilePath);
+				string file2 = Path.GetFileName(ckl2.FilePath);
+
+				string name1 = file1.Substring(0, file1.LastIndexOf('.'));
+				string name2 = file2.Substring(0, file2.LastIndexOf('.'));
+
+				string newName = "composition_path_" + name1 + "_" + name2;
+				string newFilePath = GetNewFilePath(ckl1.FilePath, newName);
+
+				return new CKL(newFilePath, ckl1.GlobalInterval, ckl1.Dimention, source, relation);
+			}
 
 
             //Semantic operations
