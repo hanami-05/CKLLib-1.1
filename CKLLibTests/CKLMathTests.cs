@@ -1,5 +1,6 @@
 using CKLLib;
 using CKLLib.Operations;
+using Newtonsoft.Json.Bson;
 
 namespace CKLLibTests
 {
@@ -96,7 +97,7 @@ namespace CKLLibTests
 					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N1", "S1"}), [new TimeInterval(2200, 2350), new TimeInterval(2425, 3000),
 					new TimeInterval(3295, 4300)]),
 					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N3", "S2"}), [new TimeInterval(1550, 2325), new TimeInterval(2650, 3220)]),
-					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N3", "S4"}), [new TimeInterval(1800, 2750)]),
+					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N3", "S3"}), [new TimeInterval(1800, 2750)]),
 					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N2", "S3"}), [new TimeInterval(1000, 1200), new TimeInterval(2100, 3400),
 					new TimeInterval(4800, 5250)]),
 					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N3", "S1"}), [new TimeInterval(1000, 5250)]),
