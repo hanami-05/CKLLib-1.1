@@ -291,6 +291,27 @@ namespace CKLLib
                 return res;
             }
 
+            private static TimeInterval IntervalDisjunctionForPath(List<TimeInterval> intervals1, List<TimeInterval> intervals2, TimeInterval global) 
+            {
+                if (intervals1.Count == 0 || intervals1[0].StartTime != global.StartTime) return TimeInterval.ZERO;
+
+                TimeInterval temp;
+
+                foreach (TimeInterval interval in intervals2) 
+                {
+                    temp = IntervalsDisjunction(interval, intervals1[0]);
+
+
+					if (temp.EndTime > intervals1[0].EndTime) 
+                    {
+                        if (temp.EndTime > global.EndTime) return new TimeInterval(global.StartTime, global.EndTime);
+                        return temp;
+                    }
+                }
+
+                return new TimeInterval(intervals1[0].StartTime, intervals1[0].EndTime);
+            }
+
             public static CKL Union(CKL ckl1, CKL ckl2) // объединение динамических отношений
             {
                 TryThrowBinaryExceptions(ckl1, ckl2);

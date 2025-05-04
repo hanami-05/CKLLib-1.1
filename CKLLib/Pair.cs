@@ -9,34 +9,37 @@ namespace CKLLib
         public object? SecondValue { get; set; }
         public object? ThirdValue { get; set; }
 
-        public IEnumerable<object> Values { get; set; }
+        public List<object> Values { get; set; }
 
         public Pair() { }
 		public Pair(object firstValue)
 		{
             if (firstValue == null) throw new ArgumentNullException("first value can not be null");
 			FirstValue = firstValue;
+            
+            Values = new List<object> { firstValue };
 		}
 		public Pair(object firstValue, object secondValue): this(firstValue)
         {
             if (secondValue == null) throw new ArgumentNullException("second value can not be null");
             SecondValue = secondValue;
+
+            Values.Add(secondValue);
         }
 
         public Pair(object firstValue, object secondValue, object thirdValue) : this(firstValue, secondValue) 
         {
             if (thirdValue == null) throw new ArgumentNullException("third value can not be null");
             ThirdValue = thirdValue;
+            Values.Add(thirdValue);
         }
 
         public Pair (IEnumerable<object> values) 
         {
-            if (FirstValue != null || SecondValue != null || ThirdValue != null) 
-                throw new ArgumentException("Use another constructor for FirstValue, SecondValue or ThirdValue");
             if (values == null) throw new ArgumentNullException("Values collection can not be null");
             if (values.Count() == 0) throw new ArgumentException("Values can not be empty");
 
-            Values = values;
+            Values = values.ToList();
         }
 
         public override bool Equals(object? obj)
