@@ -264,7 +264,7 @@ namespace CKLLib
                 else intervals.Add(temp);
             }
 
-            private static List<TimeInterval> IntervalsUnion(List<TimeInterval> intervals1, List<TimeInterval> intervals2)
+            public static List<TimeInterval> IntervalsUnion(List<TimeInterval> intervals1, List<TimeInterval> intervals2)
             {
                 List<TimeInterval> res = new List<TimeInterval>();
                 TimeInterval temp = TimeInterval.ZERO;

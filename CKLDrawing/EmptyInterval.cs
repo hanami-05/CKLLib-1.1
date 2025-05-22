@@ -14,12 +14,14 @@ namespace CKLDrawing
                                        // индикаторная функция равна 0
     {
         public TimeInterval Duration { get => _duration; private set { } }
-		new public Chain? Parent { get; }
-
+		new public Chain? Parent { get => _parent; }
+        private Chain _parent;
         public bool IsActive { get => _isActive;  }
 		
         private TimeInterval _duration;
         private bool _isActive;
+
+        internal void AddParent(Chain parent) { _parent = parent; }
 
         private void SetDefault() 
         {

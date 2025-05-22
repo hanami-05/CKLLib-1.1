@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CKLLib;
+using CKLLib.Operations;
 
 namespace CKLDrawing
 {
@@ -231,9 +232,9 @@ namespace CKLDrawing
 		{
 			double actTop = _timeScale.Height + Constants.Dimentions.TIME_OX_MARGIN.Bottom;
 
-			foreach (RelationItem item in Ckl.Relation) 
+			foreach (RelationItem item in _ckl.Relation) 
 			{
-				Chain chain = new Chain(item, Ckl.GlobalInterval, 
+				Chain chain = new Chain(item, _ckl.GlobalInterval, 
 					_timeScale.Width - Constants.Dimentions.OX_FREE_INTERVAL - Constants.Dimentions.FIRST_DEL_START);
 				
 				SetUpChainIntervals(chain);
@@ -269,6 +270,31 @@ namespace CKLDrawing
 			}
 		}
 
+		public void ChangeInterval(Interval interval, TimeInterval newInterval) 
+		{
+			if (newInterval.StartTime < _currentInterval.StartTime) newInterval.StartTime = _currentInterval.StartTime;
+			if (newInterval.EndTime > _currentInterval.EndTime) newInterval.EndTime = _currentInterval.EndTime;
+
+			Chain chain = interval.Parent;
+			RelationItem item = chain.Item;
+
+			TimeInterval oldInterval = interval.CurrentInterval;
+
+			bool removeRes = item.Intervals.Remove(oldInterval);
+
+			if (!removeRes) 
+			{
+				MessageBox.Show("Can not update this interval");
+				return;
+			}
+
+			item.Intervals = CKLMath.IntervalsUnion(item.Intervals, [newInterval]);
+
+			chain.UpdateIntervals();
+			SetUpChainIntervals(chain);
+			SetUpChainEmptyIntervals(chain);
+		}
+			
 		private void SetUpChainIntervals(Chain chain) 
 		{
 			foreach (Interval interval in chain.Intervals)

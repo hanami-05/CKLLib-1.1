@@ -1,20 +1,26 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using CKLLib;
 
 namespace CKLDrawing
 {
     public class Interval : Button // компонент инетрвала истинности индикаторной функции
     {
-        public TimeInterval CurrentInterval { get => _interval; }
+        public TimeInterval CurrentInterval { 
+            get { return _interval; } 
+        }
         public bool IsActive { get => _isActive; }
        
         
         private TimeInterval _interval;
         private bool _isActive;
 
-        new public Chain? Parent { get;  }
+        new public Chain? Parent { get => _parent;  }
+        private Chain _parent;
+
+        internal void AddParent(Chain parent) { _parent = parent; }
 
         private void SetDefault()
         {
@@ -38,6 +44,11 @@ namespace CKLDrawing
 
                 _isActive = !_isActive;
             };
+		}
+
+        private void UpdateInterval(TimeInterval interval) 
+        {
+            
         }
 
         public void Select() 
@@ -52,6 +63,7 @@ namespace CKLDrawing
 			Background = Constants.DefaultColors.INTERVAL_ITEM_COLOR;
 			BorderThickness = new Thickness(0);
             _isActive = false;
+            
 		}
 
         public Interval(TimeInterval interval) : base() 
@@ -59,5 +71,6 @@ namespace CKLDrawing
             _interval = interval;
             SetDefault();
         }
+
     }
 }

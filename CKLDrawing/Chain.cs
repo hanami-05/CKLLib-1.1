@@ -119,12 +119,15 @@ namespace CKLDrawing
         {
             Children.Add(line);
             _emptyintervals.Add(line);
+
+            line.AddParent(this);
         }
 
         private void AddInterval(Interval rect) 
         {
             Children.Add(rect);
             _intervals.Add(rect);
+            rect.AddParent(this);
         }
 
         private void RectSetUp(Interval interval, double width) 
@@ -153,6 +156,12 @@ namespace CKLDrawing
             }
 
             return new Pair(start, end);
+        }
+
+        public void UpdateIntervals()
+        {
+			Children.Clear();
+			SetUp();
         }
     }
 }
