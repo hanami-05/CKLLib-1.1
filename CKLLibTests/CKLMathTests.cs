@@ -238,8 +238,8 @@ namespace CKLLibTests
 			TimeInterval globalInterval = new TimeInterval(0, 2000);
 
 			List<TimeInterval> res = CKLMath.IntervalsDisjunctionForPath(intervals1, intervals2, globalInterval);
+
 			List<TimeInterval> exp = [new TimeInterval(0, 1000)];
-			
 
 			CollectionAssert.AreEqual(res, exp);
 		}
