@@ -924,7 +924,77 @@ namespace CKLLib
 					name);
 
 				return new CKL(newPath, interval, ckl.Dimention, source, relation);
-			} 
+			}
+
+            private static bool AreCKLGroupable(CKL ckl1, CKL ckl2) 
+            {
+                if (ckl1 == null && ckl2 == null) return true;
+
+                if (ckl1 == null || ckl2 == null) return false;
+
+                if (ckl1.Dimention != ckl2.Dimention) return false;
+
+                CKL cond = new CKL(ckl2.FilePath, ckl1.GlobalInterval, ckl2.Dimention, ckl2.Source, ckl2.Relation);
+
+                try
+                {
+                    TryThrowSemanticException(ckl1, cond);
+                    return true;
+                }
+                catch { }
+
+                try 
+                {
+                    TryThrowBinaryExceptions(ckl1, cond);
+                    return true;
+                }
+                catch { }
+
+                try
+                {
+                    TryThrowAlgebraException(ckl1, cond);
+                    return true;
+                }
+                catch { }
+
+                return false;
+            }
+
+            public static List<List<CKL>> GroupByTheme(List<CKL> diagrams, Func<CKL, CKL, bool> filter)
+            { 
+                List<List<CKL>> result = new List<List<CKL>>();
+
+                if (diagrams == null || diagrams.Count == 0) return result;
+
+                result.Add([diagrams[0]]);
+                bool isAdded = false;
+
+                foreach (CKL ckl in diagrams.GetRange(1, diagrams.Count - 1)) 
+                {
+                    foreach (List<CKL> potential in result) 
+                    {
+                        foreach (CKL cond in potential) 
+                        {
+                            if (filter(ckl, cond)) 
+                            {
+                                potential.Add(ckl);
+                                isAdded = true;
+                                break;
+                            }
+                        }   
+                    }
+
+                    if (!isAdded) result.Add([ckl]);
+                    isAdded = false;
+                }
+
+                return result;
+            }
+
+            public static List<List<CKL>> GroupByTheme(List<CKL> diagrams) 
+            {
+                return GroupByTheme(diagrams, AreCKLGroupable);
+            }
         }
     }
 }

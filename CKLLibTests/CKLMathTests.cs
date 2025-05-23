@@ -256,5 +256,53 @@ namespace CKLLibTests
 
 			CollectionAssert.AreEqual(res, exp);
 		}
+
+		[TestMethod]
+		public void Intervals_Disjunction_For_Path_Test_4() 
+		{
+			List<TimeInterval> intervals1 = [new TimeInterval(500, 1000)];
+			List<TimeInterval> intervals2 = [new TimeInterval(1200, 1800), new TimeInterval(2000, 5000)];
+
+			TimeInterval globalinterval = new TimeInterval(500, 5000);
+			List<TimeInterval> res = CKLMath.IntervalsDisjunctionForPath(intervals1, intervals2, globalinterval, 300);
+			List<TimeInterval> exp = [new TimeInterval(500, 1800)];
+
+			CollectionAssert.AreEqual(res, exp);
+		}
+
+		[TestMethod]
+		public void CKL_Group_Test_1() 
+		{
+			List<CKL> diagrams = new List<CKL>() 
+			{
+				new CKL ("1.ckl", new TimeInterval(100, 3000), TimeDimentions.SECONDS, [new Pair("a1", "b1"), new Pair("a1", "b2"), new Pair("a2", "b1"), 
+					new Pair("a2", "b2")],
+					[new RelationItem(new Pair("a1", "b1"), [new TimeInterval(350, 700)])]
+					),
+
+				new CKL ("2.ckl", new TimeInterval(250, 2200), TimeDimentions.SECONDS, [new Pair("a1", "b1"), new Pair("a1", "b2"),  new Pair("a2", "b1"), 
+					new Pair("a2", "b2")],
+					[new RelationItem(new Pair("a2", "b1"), [new TimeInterval(1150, 1775)])]
+					),
+
+				new CKL ("3.ckl", new TimeInterval(400, 800), TimeDimentions.SECONDS, [new Pair("b1", "c1"), new Pair("b1", "c2"), new Pair("b1", "c2"),
+				new Pair("b2", "c1"), new Pair("b2", "c2"), new Pair("b2", "c3")], []),
+
+				new CKL ("4.ckl", new TimeInterval(0, 1600), TimeDimentions.MINUTES, [new Pair("a1", "b1"), new Pair("a1", "b2"), new Pair("a2", "b1"), 
+					new Pair("a2", "b2")], [])
+			};
+
+			List<List<CKL>> res = CKLMath.GroupByTheme(diagrams);
+			List<List<CKL>> exp = [[diagrams[0], diagrams[1]], [diagrams[2]], [diagrams[3]]];
+
+			if (res.Count != exp.Count) Assert.AreEqual(exp.Count, res.Count);
+			 
+			for (int i = 0; i < res.Count; i++) 
+			{
+				if (!res[i].SequenceEqual(exp[i], new CKLEqualityComparer())) CollectionAssert.AreEqual(exp[i], res[i]);
+			}
+
+			Assert.AreEqual(true, true);
+		}
 	}
 }
