@@ -126,18 +126,11 @@ namespace CKLDrawing
             Width = startPos + Constants.Dimentions.OX_FREE_INTERVAL;
         }
 
-        private void SetUpSection(Section section, double height, double startPos, double value)
+        private void SetUpSection(Section section, double height, double startPos, double value) // now value is unused
         {
             section.Height = height;
             Canvas.SetLeft(section, startPos);
             Canvas.SetTop(section, (Constants.Dimentions.TIME_OX_HEIGHT - height) / 2);
-
-            section.MouseEnter += (object sender, MouseEventArgs e) =>
-            {
-                string s = value.ToString();
-
-                MessageBox.Show(s);
-            };
         }
 
         private void AddSection(Section section)

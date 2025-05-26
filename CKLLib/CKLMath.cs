@@ -264,7 +264,7 @@ namespace CKLLib
                 else intervals.Add(temp);
             }
 
-            public static List<TimeInterval> IntervalsUnion(List<TimeInterval> intervals1, List<TimeInterval> intervals2)
+            private static List<TimeInterval> IntervalsUnion(List<TimeInterval> intervals1, List<TimeInterval> intervals2)
             {
                 List<TimeInterval> res = new List<TimeInterval>();
                 TimeInterval temp = TimeInterval.ZERO;
@@ -292,6 +292,13 @@ namespace CKLLib
                 return res;
             }
 
+            public static List<TimeInterval> OrderedIntervalsUnion(List<TimeInterval> intervals1, List<TimeInterval> intervals2) 
+            {
+                List<TimeInterval> res = IntervalsUnion(intervals1, intervals2);
+
+                if (res.Count > 1) res.RemoveAll(x => x.Equals(TimeInterval.ZERO));
+                return res.OrderBy(x => x, new TimeIntervalsComparer()).ToList();
+            }
             private static TimeInterval IntervalsDisjPath(TimeInterval interval1, TimeInterval interval2, double maxRestTime) 
             {
                 if (interval1.EndTime > interval2.StartTime || interval1.EndTime + maxRestTime < interval2.StartTime) return TimeInterval.ZERO;
@@ -319,6 +326,7 @@ namespace CKLLib
 
                 return [new TimeInterval(intervals1[0].StartTime, intervals1[0].EndTime)];
             }
+
 
             public static CKL Union(CKL ckl1, CKL ckl2) // объединение динамических отношений
             {
@@ -709,34 +717,12 @@ namespace CKLLib
             {
                 HashSet<Pair> source = new HashSet<Pair>();
                 HashSet<RelationItem> relation = new HashSet<RelationItem>();
+
                 Pair p;
 
-                foreach (RelationItem item1 in ckl1.Relation)
-                {
-                    foreach (RelationItem item2 in ckl2.Relation) 
-                    {
-                        if (item1.Value.Values.LastOrDefault()?.Equals(item2.Value.Values.FirstOrDefault()) == null ?
-                            false : item1.Value.Values.LastOrDefault()!.Equals(item2.Value.Values.FirstOrDefault()) && 
-                            !IntervalsIntersection(item1.Intervals, item2.Intervals).Equals(TimeInterval.ZERO)) 
-                        {
-                            p = new Pair(item1.Value.Values.Union(item2.Value.Values));
+                //TODO: continue
 
-                            source.Add(p);
-                            relation.Add(new RelationItem(p, IntervalsUnion(item1.Intervals, item2.Intervals)));
-                        }
-                    }
-                }
-
-				string file1 = Path.GetFileName(ckl1.FilePath);
-				string file2 = Path.GetFileName(ckl2.FilePath);
-
-				string name1 = file1.Substring(0, file1.LastIndexOf('.'));
-				string name2 = file2.Substring(0, file2.LastIndexOf('.'));
-
-				string newName = "composition_path_" + name1 + "_" + name2;
-				string newFilePath = GetNewFilePath(ckl1.FilePath, newName);
-
-				return new CKL(newFilePath, ckl1.GlobalInterval, ckl1.Dimention, source, relation);
+                return new CKL();
 			}
 
 

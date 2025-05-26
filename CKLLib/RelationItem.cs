@@ -26,9 +26,13 @@ namespace CKLLib
         public RelationItem(Pair value, IEnumerable<TimeInterval> intervals)
         {
             Value = value;
-			Intervals = intervals.OrderBy(x => x, new TimeIntervalsComparer()).ToList();
-            if (Intervals.Count > 1) Intervals.RemoveAll(x => x.Equals(TimeInterval.ZERO));
+            ChangeIntervals(intervals);
         }
+        private void ChangeIntervals(IEnumerable<TimeInterval> intervals) 
+        {
+			Intervals = intervals.OrderBy(x => x, new TimeIntervalsComparer()).ToList();
+			if (Intervals.Count > 1) Intervals.RemoveAll(x => x.Equals(TimeInterval.ZERO));
+		}
 
         public RelationItem(Pair value, List<TimeInterval> intervals, object? info) : this(value, intervals)
         {

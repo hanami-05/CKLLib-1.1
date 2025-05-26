@@ -287,14 +287,31 @@ namespace CKLDrawing
 				MessageBox.Show("Can not update this interval");
 				return;
 			}
-
-			item.Intervals = CKLMath.IntervalsUnion(item.Intervals, [newInterval]);
+			
+			item.Intervals = CKLMath.OrderedIntervalsUnion(item.Intervals, [TimeInterval.GetIntervalInAnotherDemention(newInterval, _timeDimention, _ckl.Dimention)]);
 
 			chain.UpdateIntervals();
 			SetUpChainIntervals(chain);
 			SetUpChainEmptyIntervals(chain);
 		}
-			
+		
+		public void ChangeEmptyInterval(EmptyInterval interval, TimeInterval newInterval) 
+		{
+			if (newInterval.Equals(TimeInterval.ZERO)) return;
+
+			if (newInterval.StartTime < _currentInterval.StartTime) newInterval.StartTime = _currentInterval.StartTime;
+			if (newInterval.EndTime > _currentInterval.EndTime) newInterval.EndTime = _currentInterval.EndTime;
+
+			Chain chain = interval.Parent;
+			RelationItem item = chain.Item;
+
+			item.Intervals = CKLMath.OrderedIntervalsUnion(item.Intervals, [TimeInterval.GetIntervalInAnotherDemention(newInterval, _timeDimention, _ckl.Dimention)]);
+
+			chain.UpdateIntervals();
+			SetUpChainIntervals(chain);
+			SetUpChainEmptyIntervals(chain);
+		}
+
 		private void SetUpChainIntervals(Chain chain) 
 		{
 			foreach (Interval interval in chain.Intervals)

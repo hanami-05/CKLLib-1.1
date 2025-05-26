@@ -10,12 +10,14 @@ namespace CKLDrawing
         public RelationItem Item { get => _item; }
         public List<Interval> Intervals { get => _intervals; }
         public List<EmptyInterval> EmptyIntervals { get => _emptyintervals; }
+        public List<Button> AllIntervals { get => _allIntervals; }
         public ValueBox Box { get => _box;  }
 
         private RelationItem _item;
         private TimeInterval _interval;
         private List<Interval> _intervals;
         private List<EmptyInterval> _emptyintervals;
+        private List<Button> _allIntervals;
         private ValueBox _box;
 
         public Chain(RelationItem item, TimeInterval interval, double width) : base()
@@ -35,6 +37,7 @@ namespace CKLDrawing
             
             _intervals = new List<Interval>();
 			_emptyintervals = new List<EmptyInterval>();
+            _allIntervals = new List<Button>();
             //SetValue();
             FillIntervals();
         }
@@ -119,6 +122,7 @@ namespace CKLDrawing
         {
             Children.Add(line);
             _emptyintervals.Add(line);
+            _allIntervals.Add(line);
 
             line.AddParent(this);
         }
@@ -127,6 +131,7 @@ namespace CKLDrawing
         {
             Children.Add(rect);
             _intervals.Add(rect);
+            _allIntervals.Add(rect);
             rect.AddParent(this);
         }
 
