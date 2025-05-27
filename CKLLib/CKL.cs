@@ -22,7 +22,7 @@ namespace CKLLib
         public CKL()
         {
             FilePath = string.Empty;
-            GlobalInterval = new TimeInterval(0, 0);
+            GlobalInterval = TimeInterval.ZERO;
             Dimention = TimeDimentions.SECONDS;
 			Source = new HashSet<Pair>();
             Relation = new HashSet<RelationItem>();
