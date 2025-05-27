@@ -7,7 +7,7 @@
 ### Полезные ссылки
 
 - **[Библиотеки версии 1.0](https://github.com/mishabogdanov5/CKL_Lib)**
-- **[Инструментарий, использующий библиотеку](https://github.com/Yvunglord/CKLStudio)**
+- **[Инструментарий, использующий библиотеку](https://github.com/Yvunglord/CKL_Studio)**
 
 ## Короткое пояснение к каждой из библиотек
 
