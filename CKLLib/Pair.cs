@@ -107,4 +107,20 @@ namespace CKLLib
             return false;
         }
     }
+
+    public class PairComparer : IEqualityComparer<Pair>
+    {
+        public bool Equals(Pair x, Pair y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (x is null || y is null) return false;
+
+            return string.Equals(x.ToString(), y.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+
+        public int GetHashCode(Pair obj)
+        {
+            return obj.ToString().ToLower().GetHashCode();
+        }
+    }
 }
