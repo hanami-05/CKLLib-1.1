@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
 		<IsPackable>true</IsPackable>
 		<PackageId>CKLLib</PackageId>
-		<Version>1.1.0</Version>
+		<Version>1.1.01</Version>
 		<Authors>hanami-05</Authors>
 		<Description>
 			С# library for building and interacting with dynamic relationships.
@@ -13,7 +13,7 @@
 		</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>library, csharp, dynamic relations, planning problems, resource allocation</PackageTags>
-		<RepositoryUrl>https://github.com/hanami-05/CKLLib-1.1/tree/dev/CKLLib</RepositoryUrl>
+		<RepositoryUrl>https://github.com/hanami-05/CKLLib-1.1/tree/dev/CKLLib/DOCUMENTATION.md</RepositoryUrl>
 		<ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>

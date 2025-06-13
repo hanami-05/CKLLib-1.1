@@ -19,6 +19,19 @@
 
     Библиотека, отображающая динамическое отношение в виде диаграммы Ганта. CKLView - компонент WPF, являющйся диаграммой Ганта.             
 
+## Загрузка пакета из nuget (*рекомендуется*)
+- **Установить dotnet (Windows)**
+
+  ```powershell
+  winget install Microsoft.DotNet.SDK.8   
+  ```
+- **Добавление пакета в проект**
+  ```powershell | bash
+  cd <path-to-project>
+  dotnet add package CKLLib --version 1.1.1
+  ```
+---
+
 ## Как загрузить **.dll** файлы библиотек локально
 
 - **Установить dotnet (Windows)**
