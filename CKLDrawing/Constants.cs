@@ -18,6 +18,7 @@ namespace CKLDrawing
             public static readonly Brush INTERVAL_ITEM_COLOR = new SolidColorBrush(Color.FromRgb(119, 139, 235));
             public static readonly Brush INTERVAL_ITEM_ACTIVE_COLOR = new SolidColorBrush(Color.FromRgb(51, 76, 190));
             public static readonly Brush INTERVAL_ITEM_BORDER_COLOR = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            public static readonly Brush INTERVAL_ITEM_ACTIVE_FOREGROUND = new SolidColorBrush(Color.FromRgb(130, 145, 190));
             public static readonly Brush EMPTY_INTERVAL_COLOR = new SolidColorBrush(Color.FromRgb(235, 134, 134));
             public static readonly Brush EMPRY_INTERVAL_ACTIVE_COLOR = new SolidColorBrush(Color.FromRgb(219, 7, 46));
             public static readonly Brush CKL_BACKGROUND = new SolidColorBrush(Color.FromRgb(68, 68, 68));

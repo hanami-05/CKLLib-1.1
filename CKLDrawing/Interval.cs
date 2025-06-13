@@ -2,11 +2,12 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using CKLLib;
 
 namespace CKLDrawing
 {
-    public class Interval : Button // компонент инетрвала истинности индикаторной функции
+    public class Interval : Button // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     {
         public TimeInterval CurrentInterval { 
             get { return _interval; } 
@@ -35,12 +36,16 @@ namespace CKLDrawing
                 {
                     Background = Constants.DefaultColors.INTERVAL_ITEM_ACTIVE_COLOR;
                     BorderThickness = Constants.Dimentions.INTERVAL_BORDER_SIZE;
+                    Content = string.Empty;
                 }
                 else 
                 {
 					Background = Constants.DefaultColors.INTERVAL_ITEM_COLOR;
+                    Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                    FontSize = 12;
+                    FontWeight = FontWeights.Bold;
                     BorderThickness = new Thickness(0);
-				}
+                }
 
                 _isActive = !_isActive;
             };
@@ -71,6 +76,5 @@ namespace CKLDrawing
             _interval = interval;
             SetDefault();
         }
-
     }
 }

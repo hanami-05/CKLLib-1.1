@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography.Xml;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using CKLLib;
 using CKLLib.Operations;
 
@@ -318,13 +320,20 @@ namespace CKLDrawing
 			{
 				interval.Click += (object sender, RoutedEventArgs e) => 
 				{
-					if (interval.IsActive) 
+					if (interval.IsActive)
 					{
 						_selectedIntervals.Add(interval);
-						MessageBox.Show($"{TimeInterval
-							.GetIntervalInAnotherDemention(interval.CurrentInterval, _ckl.Dimention, _timeDimention)}");
-					} 
-					else _selectedIntervals.Remove(interval);
+						interval.Content = $"{TimeInterval
+							.GetIntervalInAnotherDemention(interval.CurrentInterval, _ckl.Dimention, _timeDimention)}";
+						interval.FontWeight = FontWeights.Bold;
+						interval.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255));
+                        interval.FontSize = 12;
+                    }
+					else
+					{
+						interval.Content = string.Empty;
+						_selectedIntervals.Remove(interval);
+					}
 
 				};
 			}
