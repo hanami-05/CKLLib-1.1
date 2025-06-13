@@ -48,9 +48,15 @@ namespace CKLDrawing
 			_delCoast = 1;
 			_timeDimention = _ckl.Dimention;
 			_currentInterval = new TimeInterval(_ckl.GlobalInterval.StartTime, _ckl.GlobalInterval.EndTime);
-
+			//MessageBox.Show($"{_currentInterval.Duration}");
 			SetUp();
 		}
+
+		public static CKLView Default = new CKLView(
+			new CKL() { 
+				GlobalInterval = new TimeInterval(0, 100), 
+				Dimention = TimeDimentions.SECONDS
+			});
 
 		private void SetUp()
 		{
@@ -117,9 +123,15 @@ namespace CKLDrawing
 		
 			temp.Scale(intervalMulti);
 
-			if (!IsDelCoastValid(temp, newDelCoast)) 
+			if (!IsDelCoastValidForMax(temp, newDelCoast)) 
 			{
-				MessageBox.Show("Limit error");
+				MessageBox.Show("Limit error, to much sections");
+				return;
+			}
+
+			if (!IsDelCoastValidForMin(temp, newDelCoast)) 
+			{
+				MessageBox.Show("Limit error, should be more sections");
 				return;
 			}
 
@@ -138,8 +150,8 @@ namespace CKLDrawing
 
 		private void DrawOx()
 		{
-
-			UpdateDelCoastToValid();
+			UpdateDelCoastToValidToMin();
+			UpdateDelCoastToValidToMax();
 
 			_timeScale = new TimeOx(_currentInterval, _delCoast);
 
@@ -162,14 +174,39 @@ namespace CKLDrawing
 
 		} 
 
-		private bool IsDelCoastValid(TimeInterval interval, int delCoast) 
+		private bool IsDelCoastValidForMin(TimeInterval interval, int delCoast) 
+		{
+			return interval.Duration / delCoast >= Constants.MIN_DEL_COUNT;
+		}
+
+		private bool IsDelCoastValidForMax(TimeInterval interval, int delCoast) 
 		{
 			return interval.Duration / delCoast <= Constants.MAX_DEL_COUNT;
 		}
 
-		private void UpdateDelCoastToValid() 
+		private void UpdateDelCoastToValidToMin()
 		{
-			while (!IsDelCoastValid(_currentInterval, _delCoast)) 
+			if (_ckl.Source.Count == 0 && _ckl.GlobalInterval.Equals(TimeInterval.ZERO)) return;
+
+			while (!IsDelCoastValidForMin(_currentInterval, _delCoast))
+			{
+				if (!_timeDimention.Equals(TimeDimentions.NANOSECONDS) && 
+					_delCoast / 2 == 0)
+				{
+					_delCoast = Constants.TIME_DIMENTIONS_CONVERT[(int)_timeDimention - 1];
+
+					_currentInterval.Scale(UpdateInterval((TimeDimentions)(int)_timeDimention - 1));
+					_timeDimention = (TimeDimentions)(int)_timeDimention - 1;
+				}
+				else _delCoast /= 2;
+			}
+		}
+
+		private void UpdateDelCoastToValidToMax() 
+		{
+			if (_ckl.Source.Count == 0 && _ckl.GlobalInterval.Equals(TimeInterval.ZERO)) return;
+
+			while (!IsDelCoastValidForMax(_currentInterval, _delCoast)) 
 			{
 				if (_delCoast * 2 >= Constants.TIME_DIMENTIONS_CONVERT[(int)_timeDimention] &&
 				!_timeDimention.Equals(TimeDimentions.WEEKS))

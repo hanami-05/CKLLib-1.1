@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Timers;
 
 namespace CKLLib
@@ -49,7 +50,8 @@ namespace CKLLib
             Pair? pair = obj as Pair;
             if (pair == null) return false;
 
-            return pair.ToString().Equals(ToString());
+            // return pair.ToString().Equals(ToString());
+            return pair.Values.SequenceEqual(Values);
         }
 
         public override int GetHashCode()
@@ -89,7 +91,24 @@ namespace CKLLib
             return string.Empty;
 		}
 
-        public bool HasObject(object obj, Func<object, object, bool> comp) 
+		public class PairEqualityComparer : IEqualityComparer<Pair>
+		{
+			public bool Equals(Pair? x, Pair? y)
+			{
+                if (x == null && y == null) return true;
+                if (x == null) return false;
+
+                return x.Equals(y);
+
+			}
+
+			public int GetHashCode([DisallowNull] Pair obj)
+			{
+                return obj.GetHashCode();
+			}
+		}
+
+		public bool HasObject(object obj, Func<object, object, bool> comp) 
         {
             if (SecondValue == null && FirstValue != null)
                 return comp(FirstValue, obj);
