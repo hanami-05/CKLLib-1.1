@@ -168,5 +168,7 @@ namespace CKLDrawing
 			Children.Clear();
 			SetUp();
         }
+
+        private record class Pair(object FirstValue, object SecondValue );
     }
 }

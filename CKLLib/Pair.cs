@@ -1,41 +1,18 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using System.Timers;
+
 
 namespace CKLLib
 {
     public class Pair
     {
-        public object FirstValue { get; set; }
-        public object? SecondValue { get; set; }
-        public object? ThirdValue { get; set; }
-
         public List<object> Values { get; set; }
 
-        public Pair() { }
-		public Pair(object firstValue)
-		{
-            if (firstValue == null) throw new ArgumentNullException("first value can not be null");
-			FirstValue = firstValue;
-            
-            Values = new List<object> { firstValue };
-		}
-		public Pair(object firstValue, object secondValue): this(firstValue)
+        public Pair()
         {
-            if (secondValue == null) throw new ArgumentNullException("second value can not be null");
-            SecondValue = secondValue;
-
-            Values.Add(secondValue);
+            Values = new List<object>();
         }
 
-        public Pair(object firstValue, object secondValue, object thirdValue) : this(firstValue, secondValue) 
-        {
-            if (thirdValue == null) throw new ArgumentNullException("third value can not be null");
-            ThirdValue = thirdValue;
-            Values.Add(thirdValue);
-        }
-
-        public Pair (IEnumerable<object> values) 
+        public Pair(IEnumerable<object> values)
         {
             if (values == null) throw new ArgumentNullException("Values collection can not be null");
             if (values.Count() == 0) throw new ArgumentException("Values can not be empty");
@@ -50,26 +27,16 @@ namespace CKLLib
             Pair? pair = obj as Pair;
             if (pair == null) return false;
 
-            // return pair.ToString().Equals(ToString());
-            return pair.Values.SequenceEqual(Values);
+            return pair.Values.SequenceEqual(Values, new ValuesEqComparer());
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
-
-            //TODO: переделать хеш код под много значений
+            return HashCode.Combine(Values);
         }
 
         public override string ToString()
         {
-            if (ThirdValue != null) 
-                return $"({FirstValue!.ToString()};{SecondValue!.ToString()};{ThirdValue.ToString()})";
-			
-            if (SecondValue != null)
-                return $"({FirstValue.ToString()};{SecondValue.ToString()})";
-            if (FirstValue != null) return FirstValue.ToString()!;
-
             if (Values != null)
             {
                 string res = "(";
@@ -89,41 +56,50 @@ namespace CKLLib
             }
 
             return string.Empty;
-		}
+        }
 
-		public class PairEqualityComparer : IEqualityComparer<Pair>
-		{
-			public bool Equals(Pair? x, Pair? y)
-			{
+        public class PairEqualityComparer : IEqualityComparer<Pair>
+        {
+            public bool Equals(Pair? x, Pair? y)
+            {
                 if (x == null && y == null) return true;
                 if (x == null) return false;
 
                 return x.Equals(y);
 
-			}
+            }
 
-			public int GetHashCode([DisallowNull] Pair obj)
-			{
+            public int GetHashCode([DisallowNull] Pair obj)
+            {
                 return obj.GetHashCode();
-			}
-		}
+            }
+        }
 
-		public bool HasObject(object obj, Func<object, object, bool> comp) 
+        public bool HasObject(object obj, Func<object, object, bool> comp)
         {
-            if (SecondValue == null && FirstValue != null)
-                return comp(FirstValue, obj);
-
-
-            if (ThirdValue == null && SecondValue != null)
-                return comp(SecondValue, obj) || comp(FirstValue, obj);
-
-            if (ThirdValue != null)
-                return comp(ThirdValue, obj) || comp(SecondValue, null) || comp(FirstValue, null);
-            if (Values != null) 
+            if (Values != null)
             {
                 foreach (object value in Values) if (comp(value, obj)) return true;
             }
             return false;
         }
-    }
+
+		private class ValuesEqComparer : IEqualityComparer<object>
+		{
+			public new bool Equals(object? x, object? y)
+			{
+                if (x == null || y == null) return true;
+                if (x == null) return false;
+
+                return x.ToString()!.Equals(y.ToString());
+			}
+
+			public int GetHashCode([DisallowNull] object obj)
+			{
+                return obj.GetHashCode();
+			}
+		}
+	}
+
+	
 }

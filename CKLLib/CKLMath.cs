@@ -199,6 +199,28 @@ namespace CKLLib
                 return new CKL(newPath, ckl.GlobalInterval, ckl.Dimention, newSource, ckl.Relation);
             }
 
+            public static bool SourceEquality(HashSet<Pair>? s1, HashSet<Pair>? s2) 
+            {
+                if (s1 == null && s2 == null) return true;
+
+                if (s1 == null) return false;
+                if (s2 == null) return false;
+
+                bool areEqual = true;
+
+                foreach (Pair p in s1)
+                {
+                    if (!s2.Contains(p, new Pair.PairEqualityComparer())) areEqual = false;
+                }
+
+				foreach (Pair p in s2)
+				{
+					if (!s1.Contains(p, new Pair.PairEqualityComparer())) areEqual = false;
+				}
+
+                return areEqual;
+			}
+
             //CKL Logic operations
 
             private static void TryThrowBinaryExceptions(CKL ckl1, CKL ckl2)
@@ -208,7 +230,7 @@ namespace CKLLib
 
                 if (!ckl1.GlobalInterval.Equals(ckl2.GlobalInterval)) throw new ArgumentException();
                 if (!ckl1.Dimention.Equals(ckl2.Dimention)) throw new ArgumentException();
-                if (!ckl1.Source.SequenceEqual(ckl2.Source)) throw new ArgumentException();
+                if (!SourceEquality(ckl1.Source, ckl2.Source)) throw new ArgumentException();
             }
 
             private static TimeInterval IntervalsDisjunction(TimeInterval i1, TimeInterval i2)
@@ -583,8 +605,6 @@ namespace CKLLib
             {
                 if (ckl == null) throw new ArgumentNullException("CKL object con not be null");
 
-                foreach (Pair p in ckl.Source) if (p.SecondValue == null) throw new ArgumentException("Cannot use with unary CKL");
-
                 HashSet<Pair> source = new HashSet<Pair>();
                 HashSet<RelationItem> relation = new HashSet<RelationItem>();
                 Pair pair = new Pair();
@@ -592,11 +612,9 @@ namespace CKLLib
 
                 foreach (RelationItem item in ckl.Relation)
                 {
-                    if (item.Value.ThirdValue == null)
-                    {
-                        pair = new Pair(item.Value.SecondValue, item.Value.FirstValue);
-                    }
-                    else pair = new Pair(item.Value.ThirdValue, item.Value.SecondValue, item.Value.FirstValue);
+                    if (item.Value.Values == null || item.Value.Values.Count == 0) throw new ArgumentException();
+
+                    pair = new Pair(item.Value.Values.Reverse<object>());
 
                     source.Add(pair);
 
@@ -676,7 +694,7 @@ namespace CKLLib
 
                 foreach (Pair p1 in ckl1.Source)
                 {
-                    if (!ckl2.Source.Any(el => el.FirstValue.ToString().Equals(p1.SecondValue.ToString()))) throw new ArgumentException();
+                    if (!ckl2.Source.Any(el => el.Values.Last().ToString().Equals(p1.Values.First().ToString()))) throw new ArgumentException();
                 }
             }
 
@@ -692,9 +710,9 @@ namespace CKLLib
                 {
                     foreach (RelationItem item2 in ckl2.Relation)
                     {
-                        if (item2.Value.FirstValue.ToString().Equals(item1.Value.SecondValue.ToString()))
+                        if (item2.Value.Values.First().ToString().Equals(item1.Value.Values.Last().ToString()))
                         {
-                            p = new Pair(item1.Value.FirstValue, item1.Value.SecondValue, item2.Value.SecondValue);
+                            p = new Pair(item1.Value.Values.GetRange(0, item1.Value.Values.Count - 1).Concat(item2.Value.Values));
                             source.Add(p);
                             relation.Add(new RelationItem(p, IntervalsIntersection(item1.Intervals, item2.Intervals)));
                         }
@@ -737,11 +755,11 @@ namespace CKLLib
 
                 foreach (Pair p in ckl1.Source)
                 {
-                    if (p.SecondValue != null) throw new ArgumentException();
+                    if (p.Values.Count > 1) throw new ArgumentException();
                 }
                 foreach (Pair p in ckl2.Source)
                 {
-                    if (p.SecondValue != null) throw new ArgumentException();
+                    if (p.Values.Count > 1) throw new ArgumentException();
                 }
             }
 
@@ -757,7 +775,7 @@ namespace CKLLib
                 {
                     foreach (RelationItem item2 in ckl2.Relation)
                     {
-                        p = new Pair(item1.Value.FirstValue, item2.Value.FirstValue);
+                        p = new Pair([item1.Value.Values[0], item2.Value.Values[0]]);
                         source.Add(p);
                         relation.Add(new RelationItem(p, IntervalsUnion(item1.Intervals, item2.Intervals)));
                     }
@@ -787,8 +805,8 @@ namespace CKLLib
                 {
                     foreach (RelationItem item2 in ckl2.Relation)
                     {
-                        p = new Pair(item1.Value.FirstValue, item2.Value.FirstValue);
-                        source.Add(p);
+						p = new Pair([item1.Value.Values[0], item2.Value.Values[0]]);
+						source.Add(p);
                         relation.Add(new RelationItem(p, IntervalsIntersection(item1.Intervals, item2.Intervals)));
                     }
                 }
@@ -817,8 +835,8 @@ namespace CKLLib
                 {
                     foreach (RelationItem item2 in ckl2.Relation)
                     {
-                        p = new Pair(item1.Value.FirstValue, item2.Value.FirstValue);
-                        source.Add(p);
+						p = new Pair([item1.Value.Values[0], item2.Value.Values[0]]);
+						source.Add(p);
                         relation.Add(new RelationItem(p, IntervalsDifference(item1.Intervals, item2.Intervals)));
                     }
                 }

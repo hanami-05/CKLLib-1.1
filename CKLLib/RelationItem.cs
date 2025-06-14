@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,8 @@ namespace CKLLib
     public class RelationItem: ICloneable // Элемент динамического отношения
     {
         public Pair Value { get; set; } // Элемент из множества, задающего отношение
-        public List<TimeInterval> Intervals { get; set; } // Интервалы истинности
+
+		public List<TimeInterval> Intervals { get; set; } // Интервалы истинности
                                                           // индикаторной функции элемента
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -19,20 +21,17 @@ namespace CKLLib
 
         public RelationItem()
         {
-            Value = new Pair(string.Empty, string.Empty);
+            Value = new Pair([string.Empty, string.Empty]);
             Intervals = new List<TimeInterval>();
         }
-
-        public RelationItem(Pair value, IEnumerable<TimeInterval> intervals)
+        
+        public RelationItem(Pair value, [Required] IEnumerable<TimeInterval> intervals)
         {
             Value = value;
-            ChangeIntervals(intervals);
-        }
-        private void ChangeIntervals(IEnumerable<TimeInterval> intervals) 
-        {
-			Intervals = intervals.OrderBy(x => x, new TimeIntervalsComparer()).ToList();
+			
+            Intervals = intervals.OrderBy(x => x, new TimeIntervalsComparer()).ToList();
 			if (Intervals.Count > 1) Intervals.RemoveAll(x => x.Equals(TimeInterval.ZERO));
-		}
+        }
 
         public RelationItem(Pair value, List<TimeInterval> intervals, object? info) : this(value, intervals)
         {

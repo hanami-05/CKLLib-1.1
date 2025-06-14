@@ -9,6 +9,7 @@ namespace CKLLibTests
 	[TestClass]
 	public class CKLMathTests
 	{
+
 		[TestMethod]
 		public void ItemProjection_Operation_Test_1()
 		{
@@ -17,15 +18,15 @@ namespace CKLLibTests
 				FilePath = "C:\\Users\\user\\Ciclograms\\test1.ckl",
 				GlobalInterval = new TimeInterval(0, 1500),
 				Dimention = TimeDimentions.MICROSECONDS,
-				Source = new HashSet<Pair>() { new Pair ("A1", "B1"), new Pair("A1", "B2"), new Pair("A1", "B3"),
-					new Pair("A2", "B1"), new Pair("A2", "B2"), new Pair("A2", "B3")},
+				Source = new HashSet<Pair>() { new Pair (["A1", "B1"]), new Pair(["A1", "B2"]), new Pair(["A1", "B3"]),
+					new Pair(["A2", "B1"]), new Pair(["A2", "B2"]), new Pair(["A2", "B3"])},
 				Relation = new HashSet<RelationItem>()
 				{
-					new RelationItem(new Pair("A1", "B1"), [new TimeInterval(200, 400), new TimeInterval(600, 900),
+					new RelationItem(new Pair(["A1", "B1"]), [new TimeInterval(200, 400), new TimeInterval(600, 900),
 						new TimeInterval(1400, 1450)]),
-					new RelationItem(new Pair("A1", "B3"), [new TimeInterval(0, 400), new TimeInterval(1000, 1400)]),
-					new RelationItem(new Pair("A2", "B2"), [new TimeInterval(100, 800), new TimeInterval(1100, 1250)]),
-					new RelationItem(new Pair("A2", "B3"), [new TimeInterval(0, 1200)])
+					new RelationItem(new Pair(["A1", "B3"]), [new TimeInterval(0, 400), new TimeInterval(1000, 1400)]),
+					new RelationItem(new Pair(["A2", "B2"]), [new TimeInterval(100, 800), new TimeInterval(1100, 1250)]),
+					new RelationItem(new Pair(["A2", "B3"]), [new TimeInterval(0, 1200)])
 				}
 			};
 
@@ -40,8 +41,8 @@ namespace CKLLibTests
 				FilePath = "",
 				GlobalInterval = interval,
 				Dimention = TimeDimentions.MICROSECONDS,
-				Source = new HashSet<Pair>() { new Pair("A2", "B3") },
-				Relation = new HashSet<RelationItem>() { new RelationItem(new Pair("A2", "B3"), [new TimeInterval(300, 500)]) }
+				Source = new HashSet<Pair>() { new Pair(["A2", "B3"]) },
+				Relation = new HashSet<RelationItem>() { new RelationItem(new Pair(["A2", "B3"]), [new TimeInterval(300, 500)]) }
 			};
 
 			Assert.AreEqual<CKL>(exp, res, new CKLEqualityComparer());
@@ -190,14 +191,14 @@ namespace CKLLibTests
 				FilePath = "C:\\users\\user\\test.ckl",
 				GlobalInterval = new TimeInterval(1000, 5250),
 				Dimention = TimeDimentions.NANOSECONDS,
-				Source = new HashSet<Pair>() { new Pair("S1", "X1"), new Pair("S1", "X2"), new Pair("S2", "X1"), new Pair("S2", "X2"), 
-					new Pair("S3", "X1"), new Pair("S3", "X2") },
+				Source = new HashSet<Pair>() { new Pair(["S1", "X1"]), new Pair(["S1", "X2"]), new Pair(["S2", "X1"]), new Pair(["S2", "X2"]), 
+					new Pair(["S3", "X1"]), new Pair(["S3", "X2"]) },
 				Relation = new HashSet<RelationItem>() 
 				{
-					new RelationItem(new Pair("S1", "X1"), [new TimeInterval(2200, 3000), new TimeInterval(4000, 5250)]),
-					new RelationItem(new Pair("S2", "X1"), [new TimeInterval(2500, 2850), new TimeInterval(3625, 4200)]),
-					new RelationItem(new Pair("S2", "X2"), [new TimeInterval(1275, 3550), new TimeInterval(4800, 5100)]),
-					new RelationItem(new Pair("S3", "X1"), [new TimeInterval(1100, 2200), new TimeInterval(3050, 4900)]),
+					new RelationItem(new Pair(["S1", "X1"]), [new TimeInterval(2200, 3000), new TimeInterval(4000, 5250)]),
+					new RelationItem(new Pair(["S2", "X1"]), [new TimeInterval(2500, 2850), new TimeInterval(3625, 4200)]),
+					new RelationItem(new Pair(["S2", "X2"]), [new TimeInterval(1275, 3550), new TimeInterval(4800, 5100)]),
+					new RelationItem(new Pair(["S3", "X1"]), [new TimeInterval(1100, 2200), new TimeInterval(3050, 4900)]),
 
 				}
 			};
@@ -277,25 +278,25 @@ namespace CKLLibTests
 		{
 			List<CKL> diagrams = new List<CKL>() 
 			{
-				new CKL ("1.ckl", new TimeInterval(100, 3000), TimeDimentions.SECONDS, [new Pair("a1", "b1"), new Pair("a1", "b2"), new Pair("a2", "b1"), 
-					new Pair("a2", "b2")],
-					[new RelationItem(new Pair("a1", "b1"), [new TimeInterval(350, 700)])]
+				new CKL ("1.ckl", new TimeInterval(100, 3000), TimeDimentions.SECONDS, [new Pair(["a1", "b1"]), new Pair(["a1", "b2"]), new Pair(["a2", "b1"]), 
+					new Pair(["a2", "b2"])],
+					[new RelationItem(new Pair(["a1", "b1"]), [new TimeInterval(350, 700)])]
 					),
 
-				new CKL ("2.ckl", new TimeInterval(250, 2200), TimeDimentions.SECONDS, [new Pair("a1", "b1"), new Pair("a1", "b2"),  new Pair("a2", "b1"), 
-					new Pair("a2", "b2")],
-					[new RelationItem(new Pair("a2", "b1"), [new TimeInterval(1150, 1775)])]
+				new CKL ("2.ckl", new TimeInterval(250, 2200), TimeDimentions.SECONDS, [new Pair(["a1", "b1"]), new Pair(["a1", "b2"]),  new Pair(["a2", "b1"]), 
+					new Pair(["a2", "b2"])],
+					[new RelationItem(new Pair(["a2", "b1"]), [new TimeInterval(1150, 1775)])]
 					),
 
-				new CKL ("3.ckl", new TimeInterval(400, 800), TimeDimentions.SECONDS, [new Pair("b1", "c1"), new Pair("b1", "c2"), new Pair("b1", "c2"),
-				new Pair("b2", "c1"), new Pair("b2", "c2"), new Pair("b2", "c3")], []),
+				new CKL ("3.ckl", new TimeInterval(400, 800), TimeDimentions.SECONDS, [new Pair(["b1", "c1"]), new Pair(["b1", "c2"]), new Pair(["b1", "c2"]),
+				new Pair(["b2", "c1"]), new Pair(["b2", "c2"]), new Pair(["b2", "c3"])], []),
 
-				new CKL ("4.ckl", new TimeInterval(0, 1600), TimeDimentions.MINUTES, [new Pair("a1", "b1"), new Pair("a1", "b2"), new Pair("a2", "b1"), 
-					new Pair("a2", "b2")], [])
+				new CKL ("4.ckl", new TimeInterval(0, 1600), TimeDimentions.MINUTES, [new Pair(["a1", "b1"]), new Pair(["a1", "b2"]), new Pair(["a2", "b1"]), 
+					new Pair(["a2", "b2"])], [])
 			};
 
 			List<List<CKL>> res = CKLMath.GroupByTheme(diagrams);
-			List<List<CKL>> exp = [[diagrams[0], diagrams[1]], [diagrams[2]], [diagrams[3]]];
+			List<List<CKL>> exp = [[diagrams[0], diagrams[1], diagrams[2]], [diagrams[3]]];
 
 			if (res.Count != exp.Count) Assert.AreEqual(exp.Count, res.Count);
 			 
@@ -359,8 +360,6 @@ namespace CKLLibTests
 			_graph = new CKLGraph(_ckl);
 		}
 
-		private bool _testRes1;
-
 		[TestMethod]
 		public void TestCKLGraph_1() 
 		{
@@ -371,22 +370,8 @@ namespace CKLLibTests
 				new Pair(["a3", "b3", "c2"]), new Pair(["a3", "b4", "c1"])
 			];
 
-			_testRes1 = true;
-
-			foreach (Pair p in res) 
-			{
-				if (!exp.Contains(p, new Pair.PairEqualityComparer())) _testRes1 = false;
-			}
-
-			foreach (Pair p in exp)
-			{
-				if (!res.Contains(p, new Pair.PairEqualityComparer())) _testRes1 = false;
-			}
-
-			Assert.IsTrue(_testRes1);
+			Assert.IsTrue(CKLMath.SourceEquality(res, exp));
 		}
-
-		private bool _testRes2;
 
 		[TestMethod]
 		public void TestCKLGraph_2()
@@ -398,22 +383,10 @@ namespace CKLLibTests
 				new Pair(["a3", "b1", "c1"]), new Pair(["a3", "b4", "c1"]), new Pair(["a3", "b2", "c1"])
 			];
 
-			_testRes2 = true;
 
-			foreach (Pair p in res)
-			{
-				if (!exp.Contains(p, new Pair.PairEqualityComparer())) _testRes2 = false;
-			}
-
-			foreach (Pair p in exp)
-			{
-				if (!res.Contains(p, new Pair.PairEqualityComparer())) _testRes2 = false;
-			}
-
-			Assert.IsTrue(_testRes2);
+			Assert.IsTrue(CKLMath.SourceEquality(res, exp));
 		}
 
-		private bool _testRes3;
 
 		[TestMethod]
 		public void TestCKLGraph_3()
@@ -424,22 +397,8 @@ namespace CKLLibTests
 				new Pair(["a2", "b4", "c1"]), new Pair(["a2", "b4", "c2"]), new Pair(["a2", "b2", "c2"])
 			];
 
-			_testRes3 = true;
-
-			foreach (Pair p in res)
-			{
-				if (!exp.Contains(p, new Pair.PairEqualityComparer())) _testRes3 = false;
-			}
-
-			foreach (Pair p in exp)
-			{
-				if (!res.Contains(p, new Pair.PairEqualityComparer())) _testRes3 = false;
-			}
-
-			Assert.IsTrue(_testRes3);
+			Assert.IsTrue(CKLMath.SourceEquality(res, exp));
 		}
-
-		private bool _testRes4;
 
 		[TestMethod]
 		public void TestCKLGraph_4()
@@ -451,19 +410,7 @@ namespace CKLLibTests
 				new Pair(["a3", "b3", "c2"]), new Pair(["a3", "b4", "c1"])
 			];
 
-			_testRes4 = true;
-
-			foreach (Pair p in res)
-			{
-				if (!exp.Contains(p, new Pair.PairEqualityComparer())) _testRes4 = false;
-			}
-
-			foreach (Pair p in exp)
-			{
-				if (!res.Contains(p, new Pair.PairEqualityComparer())) _testRes4 = false;
-			}
-
-			Assert.IsTrue(_testRes4);
+			Assert.IsTrue(CKLMath.SourceEquality(res, exp));
 		}
 	}	
 }

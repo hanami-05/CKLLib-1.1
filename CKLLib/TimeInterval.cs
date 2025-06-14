@@ -84,6 +84,8 @@ namespace CKLLib
 		public static readonly TimeInterval ZERO = new TimeInterval(0, 0);
         public static TimeInterval GetIntervalInAnotherDemention(TimeInterval interval, TimeDimentions oldDimention, TimeDimentions newDimention) 
         {
+            if (interval == null) return ZERO;
+
 			int oldDim = (int)oldDimention;
 			int newDim = (int)newDimention;
 			double intervalMulti = 1;
