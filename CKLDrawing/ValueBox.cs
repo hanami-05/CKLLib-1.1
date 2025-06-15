@@ -59,7 +59,7 @@ namespace CKLDrawing
 			HorizontalContentAlignment = HorizontalAlignment.Center;
 			VerticalContentAlignment = VerticalAlignment.Center;
 			Height = Constants.Dimentions.CHAIN_HEIGHT;
-			Background = Constants.DefaultColors.CKL_BACKGROUND;
+			Background = Constants.DefaultColors.VALUE_BOX_DEFAULT_BACKGROUND;
 			Foreground = Constants.DefaultColors.VALUE_COLOR;
 			BorderThickness = new Thickness(Constants.Dimentions.SECTION_WIDTH);
 			BorderBrush = Constants.DefaultColors.INTERVAL_ITEM_BORDER_COLOR;

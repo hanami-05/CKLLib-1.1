@@ -373,7 +373,21 @@ namespace CKLDrawing
 					}
 
 				};
-			}
+                interval.MouseEnter += (sender, e) =>
+                {
+                    //if (!interval.IsActive)
+                    {
+                        interval.Background = Constants.DefaultColors.INTERVAL_ITEM_HOVER_COLOR;
+                    }
+                };
+                interval.MouseLeave += (sender, e) =>
+                {
+                    //if (!interval.IsActive)
+                    {
+                        interval.Background = Constants.DefaultColors.INTERVAL_ITEM_COLOR;
+                    }
+                };
+            }
 		}
 
 		private void SetUpChainEmptyIntervals(Chain chain) 

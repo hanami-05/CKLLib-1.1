@@ -49,6 +49,21 @@ namespace CKLDrawing
 
                 _isActive = !_isActive;
             };
+
+           /* MouseEnter += (sender, e) =>
+            {
+                if (!_isActive)
+                {
+                    Background = Constants.DefaultColors.INTERVAL_ITEM_HOVER_COLOR; 
+                }
+            };
+            MouseLeave += (sender, e) =>
+            {
+                if (!_isActive)
+                {
+                    Background = Constants.DefaultColors.INTERVAL_ITEM_COLOR;
+                }
+            }; */
 		}
 
         private void UpdateInterval(TimeInterval interval) 

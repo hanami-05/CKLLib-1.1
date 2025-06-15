@@ -16,14 +16,16 @@ namespace CKLDrawing
         public static class DefaultColors 
         {
             public static readonly Brush INTERVAL_ITEM_COLOR = new SolidColorBrush(Color.FromRgb(119, 139, 235));
+            public static readonly Brush INTERVAL_ITEM_HOVER_COLOR = new SolidColorBrush(Color.FromRgb(235, 215, 119));
             public static readonly Brush INTERVAL_ITEM_ACTIVE_COLOR = new SolidColorBrush(Color.FromRgb(51, 76, 190));
-            public static readonly Brush INTERVAL_ITEM_BORDER_COLOR = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            public static readonly Brush INTERVAL_ITEM_BORDER_COLOR = new SolidColorBrush(Color.FromRgb(44, 44, 44));
             public static readonly Brush INTERVAL_ITEM_ACTIVE_FOREGROUND = new SolidColorBrush(Color.FromRgb(130, 145, 190));
             public static readonly Brush EMPTY_INTERVAL_COLOR = new SolidColorBrush(Color.FromRgb(235, 134, 134));
             public static readonly Brush EMPRY_INTERVAL_ACTIVE_COLOR = new SolidColorBrush(Color.FromRgb(219, 7, 46));
             public static readonly Brush CKL_BACKGROUND = new SolidColorBrush(Color.FromRgb(68, 68, 68));
+            public static readonly Brush VALUE_BOX_DEFAULT_BACKGROUND = new SolidColorBrush(Color.FromRgb(44, 44, 44));
             public static readonly Brush SECTION_COLOR = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            public static readonly Brush TIME_OX_COLOR = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            public static readonly Brush TIME_OX_COLOR = new SolidColorBrush(Color.FromRgb(30, 30, 30));
             public static readonly Brush VALUE_COLOR = new SolidColorBrush(Color.FromRgb(255, 255, 255));
         }
 
