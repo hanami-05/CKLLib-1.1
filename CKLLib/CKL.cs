@@ -17,15 +17,23 @@ namespace CKLLib
                                                          // на котором определено отношение
         public TimeDimentions Dimention { get; set; } // еденица измерения времени интервала
         public HashSet<Pair> Source { get; set; } // множество, на котором задано отношение
-        public HashSet<RelationItem> Relation { get; set; } // динамическое отношение
-        
+        public HashSet<RelationItem> Relation { get => _relation; 
+            set 
+            {
+                _relation = value;
+                FillRelation();
+            } 
+        } // динамическое отношение
+
+        private HashSet<RelationItem> _relation;
+
         public CKL()
         {
             FilePath = string.Empty;
             GlobalInterval = TimeInterval.ZERO;
             Dimention = TimeDimentions.SECONDS;
 			Source = new HashSet<Pair>();
-            Relation = new HashSet<RelationItem>();
+            _relation = new HashSet<RelationItem>();
         }
 
         public CKL(string filePath, TimeInterval timeInterval, TimeDimentions dimention ,HashSet<Pair> source, HashSet<RelationItem> relation)
@@ -34,18 +42,37 @@ namespace CKLLib
             GlobalInterval = timeInterval;
             Dimention = dimention;
             Source = source;
-            Relation = relation;
+            _relation = relation;
 
             FillRelation();
         }
 
         private void FillRelation() 
         {
+			List<RelationItem> extra = [];
+			foreach (RelationItem item in _relation) 
+            {
+                if (!Source.Contains(item.Value, new Pair.PairEqualityComparer())) extra.Add(item);
+            }
+
+            foreach (RelationItem item in extra) _relation.Remove(item);
+
+            extra.Clear();
+
             foreach (Pair item in Source) 
             {
-                if (!Relation.Any(x => x.Value.Equals(item))) Relation.Add(new RelationItem(item, 
-                    new List<TimeInterval>() { TimeInterval.ZERO } ));
+                if (!_relation.Any(x => x.Value.Equals(item))) _relation.Add(new RelationItem(item, [TimeInterval.ZERO]));
             }
+
+            HashSet<Pair> data = [];
+            
+            foreach (RelationItem item in _relation) 
+            {
+                if (data.Contains(item.Value, new Pair.PairEqualityComparer())) extra.Add(item);
+                else data.Add(item.Value);
+            }
+
+            foreach (RelationItem item in extra) _relation.Remove(item);
         }
 
 		public override bool Equals(object? obj)
@@ -55,12 +82,12 @@ namespace CKLLib
 
 
             return GlobalInterval.Equals(ckl.GlobalInterval) && Dimention.Equals(ckl.Dimention)
-                && Source.SetEquals(ckl.Source) && Relation.SetEquals(ckl.Relation);
+                && Source.SetEquals(ckl.Source) && _relation.SetEquals(ckl.Relation);
 		}
 
 		public override int GetHashCode()
 		{
-            return HashCode.Combine(GlobalInterval, Dimention, Source, Relation);
+            return HashCode.Combine(GlobalInterval, Dimention, Source, _relation);
 		}
 
         public static void Save(CKL ckl) 
