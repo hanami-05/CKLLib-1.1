@@ -75,7 +75,7 @@ namespace CKLLibTests
 
 			CKL data = new CKL()
 			{
-				FilePath = "C:\\Users\\79136\\Desktop\\CKL_Files\\Sputniks_Composition.ckl",
+				FilePath = "test.ckl",
 				GlobalInterval = new TimeInterval(1000, 5250),
 				Dimention = TimeDimentions.NANOSECONDS,
 				Source = source,
@@ -109,8 +109,6 @@ namespace CKLLibTests
 				}
 			};
 
-			CKL.Save(data);
-
 			TimeInterval interval = new TimeInterval(1500, 1600);
 
 			List<object> currents = ["K3", "S1"];
@@ -134,93 +132,7 @@ namespace CKLLibTests
 				}
 			};
 
-			Assert.AreEqual<CKL>(exp, res, new CKLEqualityComparer());
-		}
-
-		[TestMethod]
-		public void Composition_With_Path_Test_1() 
-		{
-			List<object> l1 = new List<object>() { "K1", "K2", "K3" };
-			List<object> l2 = new List<object>() { "M1", "M2" };
-			List<object> l3 = new List<object>() { "N1", "N2", "N3", "N4" };
-			List<object> l4 = new List<object>() { "S1", "S2", "S3" };
-
-			HashSet<Pair> source = new HashSet<Pair>();
-
-			foreach (object obj1 in l1)
-			{
-				foreach (object obj2 in l2)
-				{
-					foreach (object obj3 in l3)
-					{
-						foreach (object obj4 in l4)
-						{
-							source.Add(new Pair(new List<object>() { obj1, obj2, obj3, obj4 }));
-						}
-					}
-				}
-			}
-
-			CKL data1 = new CKL()
-			{
-				FilePath = "C:\\Users\\79136\\Desktop\\CKL_Files\\Sputniks_Composition.ckl",
-				GlobalInterval = new TimeInterval(1000, 5250),
-				Dimention = TimeDimentions.NANOSECONDS,
-				Source = source,
-				Relation = new HashSet<RelationItem>()
-				{
-					new RelationItem(new Pair(new List<object>() { "K1", "M1", "N1", "S1"}), [new TimeInterval(1000, 1300), new TimeInterval(3000, 4220)]),
-					new RelationItem(new Pair(new List<object>() { "K1", "M1", "N3", "S1"}), [new TimeInterval(1000, 1825), new TimeInterval(2000, 3450),
-						new TimeInterval(4600, 4975)]),
-					new RelationItem(new Pair(new List<object>() { "K1", "M2", "N4", "S2"}), [new TimeInterval(1110, 1405), new TimeInterval(1975, 2745),
-					new TimeInterval(3220, 3585), new TimeInterval(4295, 4700)]),
-					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N1", "S3"}), [new TimeInterval(3300, 3600)]),
-					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N3", "S1"}), [new TimeInterval(2400, 3035), new TimeInterval(3205, 4000),
-					new TimeInterval(4550, 4945), new TimeInterval(5100, 5250)]),
-					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N1", "S1"}), [new TimeInterval(2200, 2350), new TimeInterval(2425, 3000),
-					new TimeInterval(3295, 4300)]),
-					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N3", "S2"}), [new TimeInterval(1550, 2325), new TimeInterval(2650, 3220)]),
-					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N2", "S3"}), [new TimeInterval(1000, 1200), new TimeInterval(2100, 3400),
-					new TimeInterval(4800, 5250)]),
-					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N3", "S1"}), [new TimeInterval(1000, 4250)]),
-					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N4", "S1"}), [new TimeInterval(1350, 2345), new TimeInterval(2700, 5050)]),
-					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N4", "S3"}), [new TimeInterval(1400, 1600), new TimeInterval(1800, 3225)]),
-				}
-			};
-
-
-			CKL data2 = new CKL()
-			{
-				FilePath = "C:\\users\\user\\test.ckl",
-				GlobalInterval = new TimeInterval(1000, 5250),
-				Dimention = TimeDimentions.NANOSECONDS,
-				Source = new HashSet<Pair>() { new Pair(["S1", "X1"]), new Pair(["S1", "X2"]), new Pair(["S2", "X1"]), new Pair(["S2", "X2"]), 
-					new Pair(["S3", "X1"]), new Pair(["S3", "X2"]) },
-				Relation = new HashSet<RelationItem>() 
-				{
-					new RelationItem(new Pair(["S1", "X1"]), [new TimeInterval(2200, 3000), new TimeInterval(4000, 5250)]),
-					new RelationItem(new Pair(["S2", "X1"]), [new TimeInterval(2500, 2850), new TimeInterval(3625, 4200)]),
-					new RelationItem(new Pair(["S2", "X2"]), [new TimeInterval(1275, 3550), new TimeInterval(4800, 5100)]),
-					new RelationItem(new Pair(["S3", "X1"]), [new TimeInterval(1100, 2200), new TimeInterval(3050, 4900)]),
-
-				}
-			};
-
-			CKL res = CKLMath.CompositionWithPath(data1, data2);
-
-
-			//TODO: test
-			CKL exp = new CKL()
-			{
-				FilePath = "",
-				GlobalInterval = new TimeInterval(1000, 5250),
-				Dimention = TimeDimentions.NANOSECONDS,
-				Source = new HashSet<Pair>()
-				{
-					new Pair([""])
-				},
-
-			};
+			Assert.AreEqual(exp, res, new CKLEqualityComparer());
 		}
 
 		[TestMethod]
