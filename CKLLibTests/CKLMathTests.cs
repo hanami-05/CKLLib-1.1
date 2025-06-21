@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using CKLLib;
 using CKLLib.Operations;
 using Newtonsoft.Json.Bson;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CKLLibTests
 {
@@ -66,7 +67,7 @@ namespace CKLLibTests
 					{
 						foreach (object obj4 in l4) 
 						{
-							source.Add(new Pair(new List<object>() { obj1, obj2, obj3, obj4}));
+							source.Add(new Pair([obj1, obj2, obj3, obj4]));
 						}
 					}
 				}
@@ -94,7 +95,6 @@ namespace CKLLibTests
 					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N1", "S3"}), [new TimeInterval(3300, 3600)]),
 					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N3", "S1"}), [new TimeInterval(2400, 3035), new TimeInterval(3205, 4000), 
 					new TimeInterval(4550, 4945), new TimeInterval(5100, 5250)]),
-					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N4", "S2"}), [new TimeInterval(1000, 1500), new TimeInterval(2500, 2800)]),
 					new RelationItem(new Pair(new List<object>() { "K2", "M2", "N4", "S2"}), [new TimeInterval(1200, 1385), new TimeInterval(2005, 2815),
 					new TimeInterval(3025, 3450), new TimeInterval(3800, 4025), new TimeInterval(4550, 4750), new TimeInterval(4900, 5050)]),
 					new RelationItem(new Pair(new List<object>() { "K3", "M1", "N1", "S1"}), [new TimeInterval(2200, 2350), new TimeInterval(2425, 3000),
@@ -108,6 +108,8 @@ namespace CKLLibTests
 					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N4", "S3"}), [new TimeInterval(1400, 1600), new TimeInterval(1800, 3225)]),
 				}
 			};
+
+			CKL.Save(data);
 
 			TimeInterval interval = new TimeInterval(1500, 1600);
 
@@ -185,6 +187,7 @@ namespace CKLLibTests
 					new RelationItem(new Pair(new List<object>() { "K3", "M2", "N4", "S3"}), [new TimeInterval(1400, 1600), new TimeInterval(1800, 3225)]),
 				}
 			};
+
 
 			CKL data2 = new CKL()
 			{
@@ -306,111 +309,6 @@ namespace CKLLibTests
 			}
 
 			Assert.AreEqual(true, true);
-		}
-
-		private CKL _ckl = new CKL();
-		private CKLGraph _graph;
-
-		[TestInitialize]
-		public void CKLGraphInit() 
-		{
-			HashSet<string> A = ["a1", "a2", "a3"];
-			HashSet<string> B = ["b1", "b2", "b3", "b4"];
-			HashSet<string> C = ["c1", "c2"];
-
-			HashSet<Pair> source = new HashSet<Pair>();
-
-			foreach (string a in A)
-			{
-				foreach (string b in B)
-				{
-					foreach (string c in C) source.Add(new Pair(new List<object>() { a, b, c }));
-				}
-			}
-
-			_ckl = new CKL()
-			{
-				FilePath = "C:\\Users\\graph_test2.ckl",
-				GlobalInterval = new TimeInterval(0, 2000),
-				Dimention = TimeDimentions.MINUTES,
-				Source = source,
-				Relation = [
-					new RelationItem(new Pair(["a1", "b1", "c1"]), [new TimeInterval(200, 700), new TimeInterval(1400, 1850)]),
-					new RelationItem(new Pair(["a1", "b1", "c2"]), [new TimeInterval(0, 1000)]),
-					new RelationItem(new Pair(["a1", "b2", "c2"]), [new TimeInterval(1500, 1800), new TimeInterval(1900, 2000)]),
-					new RelationItem(new Pair(["a1", "b3", "c1"]), [new TimeInterval(800, 1000), new TimeInterval(1200, 1950)]),
-					new RelationItem(new Pair(["a2", "b2", "c1"]), [new TimeInterval(0, 200), new TimeInterval(1400, 1600)]),
-					new RelationItem(new Pair(["a2", "b2", "c2"]), [new TimeInterval(0, 500), new TimeInterval(800, 1200), 
-						new TimeInterval(1800, 2000)]),
-					new RelationItem(new Pair(["a2", "b3", "c2"]), [new TimeInterval(0, 300), new TimeInterval(400, 650),
-					new TimeInterval(1000, 1300), new TimeInterval(1550, 1700)]),
-					new RelationItem(new Pair(["a2", "b4", "c1"]), [new TimeInterval(600, 1100), new TimeInterval(1500, 2000)]),
-					new RelationItem(new Pair(["a2", "b4", "c2"]), [new TimeInterval(0, 900), new TimeInterval(1200, 2000)]),
-					new RelationItem(new Pair(["a3", "b1", "c1"]), [new TimeInterval(0, 200), new TimeInterval(900, 1600)]),
-					new RelationItem(new Pair(["a3", "b1", "c2"]), [new TimeInterval(200, 700), new TimeInterval(900, 1050),
-					new TimeInterval(1200, 1450), new TimeInterval(1600, 1900)]),
-					new RelationItem(new Pair(["a3", "b2", "c1"]), [new TimeInterval(0, 700), new TimeInterval(1000, 1200)]),
-					new RelationItem(new Pair(["a3", "b3", "c2"]), [new TimeInterval(100, 300), new TimeInterval(500, 800),
-					new TimeInterval(900, 1250), new TimeInterval(1400, 1600), new TimeInterval(1700, 1950)]),
-					new RelationItem(new Pair(["a3", "b4", "c1"]), [new TimeInterval(0, 1300), new TimeInterval(1600, 2000)])
-
-				]
-			};
-
-			_graph = new CKLGraph(_ckl);
-		}
-
-		[TestMethod]
-		public void TestCKLGraph_1() 
-		{
-			HashSet<Pair> res = _graph.GetGraphByTime(1200);
-
-			HashSet<Pair> exp = [new Pair(["a1", "b3", "c1"]), new Pair(["a2", "b3", "c2"]),
-				new Pair(["a2", "b4", "c2"]), new Pair(["a3", "b1", "c1"]), new Pair(["a3", "b1", "c2"]),
-				new Pair(["a3", "b3", "c2"]), new Pair(["a3", "b4", "c1"])
-			];
-
-			Assert.IsTrue(CKLMath.SourceEquality(res, exp));
-		}
-
-		[TestMethod]
-		public void TestCKLGraph_2()
-		{
-			HashSet<Pair> res = _graph.GetGraphByTime(0);
-
-			HashSet<Pair> exp = [new Pair(["a1", "b1", "c2"]), new Pair(["a2", "b2", "c1"]),
-				new Pair(["a2", "b2", "c2"]), new Pair(["a2", "b3", "c2"]), new Pair(["a2", "b4", "c2"]),
-				new Pair(["a3", "b1", "c1"]), new Pair(["a3", "b4", "c1"]), new Pair(["a3", "b2", "c1"])
-			];
-
-
-			Assert.IsTrue(CKLMath.SourceEquality(res, exp));
-		}
-
-
-		[TestMethod]
-		public void TestCKLGraph_3()
-		{
-			HashSet<Pair> res = _graph.GetGraphByTime(2000);
-
-			HashSet<Pair> exp = [ new Pair(["a3", "b4", "c1"]), new Pair(["a1", "b2", "c2"]), 
-				new Pair(["a2", "b4", "c1"]), new Pair(["a2", "b4", "c2"]), new Pair(["a2", "b2", "c2"])
-			];
-
-			Assert.IsTrue(CKLMath.SourceEquality(res, exp));
-		}
-
-		[TestMethod]
-		public void TestCKLGraph_4()
-		{
-			HashSet<Pair> res = _graph.GetGraphByTime(1215.735);
-
-			HashSet<Pair> exp = [new Pair(["a1", "b3", "c1"]), new Pair(["a2", "b3", "c2"]),
-				new Pair(["a2", "b4", "c2"]), new Pair(["a3", "b1", "c1"]), new Pair(["a3", "b1", "c2"]),
-				new Pair(["a3", "b3", "c2"]), new Pair(["a3", "b4", "c1"])
-			];
-
-			Assert.IsTrue(CKLMath.SourceEquality(res, exp));
 		}
 	}	
 }

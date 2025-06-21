@@ -867,7 +867,8 @@ namespace CKLLib
 
                 foreach (RelationItem item in ckl.Relation)
                 {
-                    if (item.Value.HasObject(current, comp) && IsIntervalInserted(interval, item.Intervals))
+                    if (item.Value.HasObject(current, comp) && !item.Intervals[0].Equals(TimeInterval.ZERO) && 
+                        IsIntervalInserted(interval, item.Intervals))
                     {
                         source.Add(item.Value);
                         relation.Add(new RelationItem(item.Value, new List<TimeInterval>() { (TimeInterval)interval.Clone() }));
@@ -909,7 +910,8 @@ namespace CKLLib
 
 				foreach (RelationItem item in ckl.Relation)
 				{
-					if (ContainsMany(item.Value, currents, comp) && IsIntervalInserted(interval, item.Intervals))
+					if (ContainsMany(item.Value, currents, comp) && !item.Intervals[0].Equals(TimeInterval.ZERO) && 
+                        IsIntervalInserted(interval, item.Intervals))
 					{
 						source.Add(item.Value);
 						relation.Add(new RelationItem(item.Value, new List<TimeInterval>() { (TimeInterval)interval.Clone() }));
