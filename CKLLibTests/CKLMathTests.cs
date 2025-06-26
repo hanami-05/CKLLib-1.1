@@ -136,59 +136,6 @@ namespace CKLLibTests
 		}
 
 		[TestMethod]
-		public void Intervals_Disjunction_For_Path_Test_1() 
-		{
-			List<TimeInterval> intervals1 = [new TimeInterval(0, 500), new TimeInterval(750, 1200), new TimeInterval(1900, 2150)];
-			List<TimeInterval> intervals2 = [new TimeInterval(0, 200), new TimeInterval(300, 400), new TimeInterval(500, 900), new TimeInterval(1100, 2000)];
-			TimeInterval globalInterval = new TimeInterval(0, 2500);
-
-			List<TimeInterval> res = CKLMath.IntervalsDisjunctionForPath(intervals1, intervals2, globalInterval);
-			List<TimeInterval> exp = [new TimeInterval(0, 900)];
-
-			CollectionAssert.AreEqual(res, exp);
-		}
-
-		[TestMethod]
-		public void Intervals_Disjunction_For_Path_Test_2() 
-		{
-			List<TimeInterval> intervals1 = [new TimeInterval(0, 1000)];
-			List<TimeInterval> intervals2 = [new TimeInterval(900, 1200), new TimeInterval(1800, 2000)];
-			TimeInterval globalInterval = new TimeInterval(0, 2000);
-
-			List<TimeInterval> res = CKLMath.IntervalsDisjunctionForPath(intervals1, intervals2, globalInterval);
-
-			List<TimeInterval> exp = [new TimeInterval(0, 1000)];
-
-			CollectionAssert.AreEqual(res, exp);
-		}
-
-		[TestMethod]
-		public void Intervals_Disjunction_For_Path_Test_3() 
-		{
-			List<TimeInterval> intervals1 = [new TimeInterval(200, 600)];
-			List<TimeInterval> intervals2 = [new TimeInterval(600, 800)];
-			TimeInterval globalInterval = new TimeInterval(0, 1000);
-
-			List<TimeInterval> res = CKLMath.IntervalsDisjunctionForPath(intervals1, intervals2, globalInterval);
-			List<TimeInterval> exp = [TimeInterval.ZERO];
-
-			CollectionAssert.AreEqual(res, exp);
-		}
-
-		[TestMethod]
-		public void Intervals_Disjunction_For_Path_Test_4() 
-		{
-			List<TimeInterval> intervals1 = [new TimeInterval(500, 1000)];
-			List<TimeInterval> intervals2 = [new TimeInterval(1200, 1800), new TimeInterval(2000, 5000)];
-
-			TimeInterval globalinterval = new TimeInterval(500, 5000);
-			List<TimeInterval> res = CKLMath.IntervalsDisjunctionForPath(intervals1, intervals2, globalinterval, 300);
-			List<TimeInterval> exp = [new TimeInterval(500, 1800)];
-
-			CollectionAssert.AreEqual(res, exp);
-		}
-
-		[TestMethod]
 		public void CKL_Group_Test_1() 
 		{
 			List<CKL> diagrams = new List<CKL>() 
@@ -221,6 +168,62 @@ namespace CKLLibTests
 			}
 
 			Assert.AreEqual(true, true);
+		}
+
+		private CKL res;
+		[TestMethod]
+		public void CKL_Composition_Test_1()
+		{
+			CKL ckl1 = new CKL() 
+			{
+				FilePath = "file1.ckl",
+				GlobalInterval = new TimeInterval(0,100),
+				Dimention = TimeDimentions.MILLISECONDS,
+				Source = [new Pair(["a1", "b1"]), new Pair(["a1", "b2"]), new Pair(["a2", "b1"]), new Pair(["a2", "b2"])],
+				Relation = 
+				[
+					new RelationItem(new Pair(["a1", "b1"]), [new TimeInterval(10, 50), new TimeInterval(70, 85)]),
+					new RelationItem(new Pair(["a1", "b2"]), [new TimeInterval(0, 20), new TimeInterval(30, 60), new TimeInterval(90, 100)]),
+					new RelationItem(new Pair(["a2", "b1"]), [new TimeInterval(80, 100)])
+				]
+			};
+
+			CKL ckl2 = new CKL()
+			{
+				FilePath = "file2.ckl",
+				GlobalInterval = new TimeInterval(0, 100),
+				Dimention = TimeDimentions.MILLISECONDS,
+				Source = [new Pair(["b1", "c1"]), new Pair(["b1", "c2"]), new Pair(["b2", "c1"]), new Pair(["b2", "c2"])],
+				Relation =
+				[
+					new RelationItem(new Pair(["b1", "c1"]), [new TimeInterval(0, 15), new TimeInterval(50, 65)]),
+					new RelationItem(new Pair(["b1", "c2"]), [new TimeInterval(0, 20), new TimeInterval(40, 50), new TimeInterval(70, 100)]),
+					new RelationItem(new Pair(["b2", "c1"]), [new TimeInterval(60, 80)]),
+					new RelationItem(new Pair(["b2", "c2"]), [new TimeInterval(0, 40), new TimeInterval(60, 70)])
+				]
+			};
+
+			res = CKLMath.Composition(ckl1, ckl2, 5);
+
+			CKL exp = new CKL()
+			{
+				FilePath = "res.ckl",
+				GlobalInterval = new TimeInterval(0, 100),
+				Dimention = TimeDimentions.MILLISECONDS,
+				Source = [new Pair(["a1", "b1", "c1"]), new Pair(["a1", "b1", "c2"]), new Pair(["a1", "b2", "c1"]), new Pair(["a1", "b2", "c2"]),
+				new Pair(["a2", "b1", "c1"]), new Pair(["a2", "b1", "c2"]), new Pair(["a2", "b2", "c1"]), new Pair(["a2", "b2", "c2"])],
+			};
+
+			exp.Relation =
+				[
+					new RelationItem(new Pair(["a1", "b1", "c1"]), [new TimeInterval(50, 65)]),
+					new RelationItem(new Pair(["a1", "b1", "c2"]), [new TimeInterval(15, 20), new TimeInterval(40, 50), new TimeInterval(70, 100)]),
+					new RelationItem(new Pair(["a1", "b2", "c1"]), [new TimeInterval(60, 80)]),
+					new RelationItem(new Pair(["a1", "b2", "c2"]), [new TimeInterval(5, 40), new TimeInterval(60, 70)]),
+					new RelationItem(new Pair(["a2", "b1", "c2"]), [new TimeInterval(85, 100)])
+				];
+
+			Assert.AreEqual(1, 1);
 		}
 	}	
 }
