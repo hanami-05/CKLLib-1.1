@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CKLLib;
+using CKLLib.Operations;
 
 namespace CKLDrawing
 {
@@ -45,9 +46,15 @@ namespace CKLDrawing
 			_delCoast = 1;
 			_timeDimention = _ckl.Dimention;
 			_currentInterval = new TimeInterval(_ckl.GlobalInterval.StartTime, _ckl.GlobalInterval.EndTime);
-
+			//MessageBox.Show($"{_currentInterval.Duration}");
 			SetUp();
 		}
+
+		public static CKLView Default = new CKLView(
+			new CKL() { 
+				GlobalInterval = new TimeInterval(0, 100), 
+				Dimention = TimeDimentions.SECONDS
+			});
 
 		private void SetUp()
 		{
@@ -102,7 +109,31 @@ namespace CKLDrawing
 			{
 				//if ((int) newDimention > (int) _timeDimention) delMulti = (double)newDelCoast / _delCoast;
 				intervalMulti = UpdateInterval(newDimention);
-			} 
+			}
+
+
+			TimeInterval temp = _currentInterval.Clone() as TimeInterval;
+			if (temp == null) 
+			{
+				MessageBox.Show("Null interval");
+				return;
+			}
+		
+			temp.Scale(intervalMulti);
+
+			if (!IsDelCoastValidForMax(temp, newDelCoast)) 
+			{
+				MessageBox.Show("Limit error, to much sections");
+				return;
+			}
+
+			if (!IsDelCoastValidForMin(temp, newDelCoast)) 
+			{
+				MessageBox.Show("Limit error, should be more sections");
+				return;
+			}
+
+			_currentInterval = temp;
 
 			double scale = intervalMulti * delMulti;
 
@@ -117,6 +148,8 @@ namespace CKLDrawing
 
 		private void DrawOx()
 		{
+			UpdateDelCoastToValidToMin();
+			UpdateDelCoastToValidToMax();
 
 			_timeScale = new TimeOx(_currentInterval, _delCoast);
 
@@ -137,8 +170,54 @@ namespace CKLDrawing
 				Margin = Constants.Dimentions.TIME_OX_MARGIN,
 			});
 
+		} 
+
+		private bool IsDelCoastValidForMin(TimeInterval interval, int delCoast) 
+		{
+			return interval.Duration / delCoast >= Constants.MIN_DEL_COUNT;
 		}
 
+		private bool IsDelCoastValidForMax(TimeInterval interval, int delCoast) 
+		{
+			return interval.Duration / delCoast <= Constants.MAX_DEL_COUNT;
+		}
+
+		private void UpdateDelCoastToValidToMin()
+		{
+			if (_ckl.Source.Count == 0 && _ckl.GlobalInterval.Equals(TimeInterval.ZERO)) return;
+
+			while (!IsDelCoastValidForMin(_currentInterval, _delCoast))
+			{
+				if (!_timeDimention.Equals(TimeDimentions.NANOSECONDS) && 
+					_delCoast / 2 == 0)
+				{
+					_delCoast = Constants.TIME_DIMENTIONS_CONVERT[(int)_timeDimention - 1];
+
+					_currentInterval.Scale(UpdateInterval((TimeDimentions)(int)_timeDimention - 1));
+					_timeDimention = (TimeDimentions)(int)_timeDimention - 1;
+				}
+				else _delCoast /= 2;
+			}
+		}
+
+		private void UpdateDelCoastToValidToMax() 
+		{
+			if (_ckl.Source.Count == 0 && _ckl.GlobalInterval.Equals(TimeInterval.ZERO)) return;
+
+			while (!IsDelCoastValidForMax(_currentInterval, _delCoast)) 
+			{
+				if (_delCoast * 2 >= Constants.TIME_DIMENTIONS_CONVERT[(int)_timeDimention] &&
+				!_timeDimention.Equals(TimeDimentions.WEEKS))
+				{
+					_delCoast = 1;
+					
+					_currentInterval.Scale(UpdateInterval((TimeDimentions)(int)_timeDimention + 1));
+					_timeDimention = (TimeDimentions)(int)_timeDimention + 1;
+				}
+				else _delCoast *= 2;
+			}
+		}
+			
 		private void ChangeDelCoast()
 		{
 			(_listView.Children[0] as ValueBox).Content =
@@ -181,7 +260,7 @@ namespace CKLDrawing
 				}
 			}
 
-			_currentInterval.Scale(intervalMulti);
+			//_currentInterval.Scale(intervalMulti);
 
 			return intervalMulti;
 		}
@@ -190,9 +269,9 @@ namespace CKLDrawing
 		{
 			double actTop = _timeScale.Height + Constants.Dimentions.TIME_OX_MARGIN.Bottom;
 
-			foreach (RelationItem item in Ckl.Relation) 
+			foreach (RelationItem item in _ckl.Relation) 
 			{
-				Chain chain = new Chain(item, Ckl.GlobalInterval, 
+				Chain chain = new Chain(item, _ckl.GlobalInterval, 
 					_timeScale.Width - Constants.Dimentions.OX_FREE_INTERVAL - Constants.Dimentions.FIRST_DEL_START);
 				
 				SetUpChainIntervals(chain);
@@ -226,6 +305,48 @@ namespace CKLDrawing
 
 				_listView.Children.Add(vb);
 			}
+		}
+
+		public void ChangeInterval(Interval interval, TimeInterval newInterval) 
+		{
+			if (newInterval.StartTime < _currentInterval.StartTime) newInterval.StartTime = _currentInterval.StartTime;
+			if (newInterval.EndTime > _currentInterval.EndTime) newInterval.EndTime = _currentInterval.EndTime;
+
+			Chain chain = interval.Parent;
+			RelationItem item = chain.Item;
+
+			TimeInterval oldInterval = interval.CurrentInterval;
+
+			bool removeRes = item.Intervals.Remove(oldInterval);
+
+			if (!removeRes) 
+			{
+				MessageBox.Show("Can not update this interval");
+				return;
+			}
+			
+			item.Intervals = CKLMath.OrderedIntervalsUnion(item.Intervals, [TimeInterval.GetIntervalInAnotherDemention(newInterval, _timeDimention, _ckl.Dimention)]);
+
+			chain.UpdateIntervals();
+			SetUpChainIntervals(chain);
+			SetUpChainEmptyIntervals(chain);
+		}
+		
+		public void ChangeEmptyInterval(EmptyInterval interval, TimeInterval newInterval) 
+		{
+			if (newInterval.Equals(TimeInterval.ZERO)) return;
+
+			if (newInterval.StartTime < _currentInterval.StartTime) newInterval.StartTime = _currentInterval.StartTime;
+			if (newInterval.EndTime > _currentInterval.EndTime) newInterval.EndTime = _currentInterval.EndTime;
+
+			Chain chain = interval.Parent;
+			RelationItem item = chain.Item;
+
+			item.Intervals = CKLMath.OrderedIntervalsUnion(item.Intervals, [TimeInterval.GetIntervalInAnotherDemention(newInterval, _timeDimention, _ckl.Dimention)]);
+
+			chain.UpdateIntervals();
+			SetUpChainIntervals(chain);
+			SetUpChainEmptyIntervals(chain);
 		}
 
 		private void SetUpChainIntervals(Chain chain) 

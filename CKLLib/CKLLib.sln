@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CKLLib", "CKLLib.csproj", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CKLDrawing", "..\CKLDrawing\CKLDrawing.csproj", "{CC90ECCA-0148-4B57-95EC-E9E7B6FA23A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CKLLibTests", "..\CKLLibTests\CKLLibTests.csproj", "{9B62E404-7C9D-45B6-A797-76BB2412BD97}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CKLLibTests", "..\CKLLibTests\CKLLibTests.csproj", "{D3068786-1EE1-4CCF-98A7-0E9E95499892}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{CC90ECCA-0148-4B57-95EC-E9E7B6FA23A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC90ECCA-0148-4B57-95EC-E9E7B6FA23A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC90ECCA-0148-4B57-95EC-E9E7B6FA23A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B62E404-7C9D-45B6-A797-76BB2412BD97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B62E404-7C9D-45B6-A797-76BB2412BD97}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B62E404-7C9D-45B6-A797-76BB2412BD97}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B62E404-7C9D-45B6-A797-76BB2412BD97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3068786-1EE1-4CCF-98A7-0E9E95499892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3068786-1EE1-4CCF-98A7-0E9E95499892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3068786-1EE1-4CCF-98A7-0E9E95499892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3068786-1EE1-4CCF-98A7-0E9E95499892}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

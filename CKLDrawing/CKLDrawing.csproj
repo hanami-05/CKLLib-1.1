@@ -1,14 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <DebugType>embedded</DebugType>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CKLLib\CKLLib.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CKLLib\CKLLib.csproj" />
+    </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Costura.Fody" Version="6.0.0">
+        <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
+      <PackageReference Include="System.Text.Json" Version="9.0.6" />
+    </ItemGroup>
+
+	<PropertyGroup>
+		<GenerateDependencyFile>false</GenerateDependencyFile>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+  
 </Project>

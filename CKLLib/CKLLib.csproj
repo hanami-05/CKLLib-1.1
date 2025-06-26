@@ -1,9 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+		<IsPackable>true</IsPackable>
+		<PackageId>CKLLib</PackageId>
+		<Version>1.1.2</Version>
+		<Authors>hanami-05</Authors>
+		<Description>
+			С# library for building and interacting with dynamic relationships.
 
+			Contains operations of the algebra of dynamic relations, as well as the necessary components for working with relations
+		</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>DOCUMENTATION.md</PackageReadmeFile>
+		<PackageTags>library, csharp, dynamic relations, planning problems, resource allocation</PackageTags>
+		<RepositoryUrl>https://github.com/hanami-05/CKLLib-1.1/tree/dev/CKLLib/DOCUMENTATION.md</RepositoryUrl>
+		<ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <DebugType>embedded</DebugType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Costura.Fody" Version="6.0.0">
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="System.Text.Json" Version="9.0.6" />
+    </ItemGroup>
+
+	<ItemGroup>
+		<None Include="DOCUMENTATION.md" Pack="true" PackagePath="\" />
+		<None Include="LICENSE.txt" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	
+	<PropertyGroup>
+		<GenerateDependencyFile>false</GenerateDependencyFile>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+	
 </Project>
